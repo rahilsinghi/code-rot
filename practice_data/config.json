@@ -1,0 +1,14 @@
+{
+  "languages": [
+    "python",
+    "javascript",
+    "typescript",
+    "react"
+  ],
+  "current_language": "python",
+  "difficulty_preference": "mixed",
+  "topic_preference": "sequential",
+  "daily_goal": 3,
+  "review_interval": 7,
+  "auto_git": true
+}
