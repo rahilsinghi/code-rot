@@ -10,9 +10,19 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Install Python dependencies
-echo "📦 Installing Python dependencies..."
-pip3 install -r requirements.txt
+# Create and activate virtual environment
+echo "🐍 Setting up Python virtual environment..."
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+    echo "✅ Virtual environment created"
+else
+    echo "ℹ️ Virtual environment already exists"
+fi
+
+# Activate virtual environment and install dependencies
+echo "📦 Installing Python dependencies in virtual environment..."
+source venv/bin/activate
+pip install -r requirements.txt
 
 # Make practice script executable
 chmod +x practice.py
@@ -37,10 +47,11 @@ fi
 if ! grep -q "alias practice=" "$SHELL_RC" 2>/dev/null; then
     echo "" >> "$SHELL_RC"
     echo "# Coding Practice Aliases" >> "$SHELL_RC"
-    echo "alias practice='python3 $(pwd)/practice.py'" >> "$SHELL_RC"
-    echo "alias pstart='python3 $(pwd)/practice.py start'" >> "$SHELL_RC"
-    echo "alias pcomplete='python3 $(pwd)/practice.py complete'" >> "$SHELL_RC"
-    echo "alias pstats='python3 $(pwd)/practice.py stats'" >> "$SHELL_RC"
+    echo "alias practice='source $(pwd)/venv/bin/activate && python $(pwd)/practice.py'" >> "$SHELL_RC"
+    echo "alias pstart='source $(pwd)/venv/bin/activate && python $(pwd)/practice.py start'" >> "$SHELL_RC"
+    echo "alias pcomplete='source $(pwd)/venv/bin/activate && python $(pwd)/practice.py complete'" >> "$SHELL_RC"
+    echo "alias pstats='source $(pwd)/venv/bin/activate && python $(pwd)/practice.py stats'" >> "$SHELL_RC"
+    echo "alias activate-practice='source $(pwd)/venv/bin/activate'" >> "$SHELL_RC"
     echo "✅ Added shell aliases to $SHELL_RC"
     echo "   Run 'source $SHELL_RC' or restart your terminal to use aliases"
 else

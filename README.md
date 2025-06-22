@@ -90,6 +90,8 @@ This repository serves as a structured environment for:
    ```bash
    ./setup.sh
    ```
+   
+   This creates a Python virtual environment with all useful libraries (NumPy, pandas, matplotlib, pytest, etc.) and sets up shell aliases.
 
 2. **Manual Setup**:
    ```bash
@@ -98,12 +100,16 @@ This repository serves as a structured environment for:
 
 3. **Start Your First Practice Session**:
    ```bash
-   python3 practice.py start
+   # Using aliases (after setup.sh)
+   pstart --topic arrays --language python
+   
+   # Or manual command
+   source venv/bin/activate && python practice.py start
    ```
 
 4. **Complete and Track Progress**:
    ```bash
-   python3 practice.py complete --notes "Your approach notes"
+   pcomplete --notes "Your approach notes"
    ```
 
 ### 🤖 Automation Features
