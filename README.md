@@ -81,15 +81,40 @@ This repository serves as a structured environment for:
 ## 🔥 Getting Started
 
 ### Prerequisites
-- Choose your preferred programming language(s)
-- Set up your development environment
-- Install testing frameworks if needed
+- Python 3.6+ (for automation system)
+- Git (for progress tracking)
+- Your preferred code editor
 
 ### Quick Start
-1. Clone this repository
-2. Navigate to the appropriate directory for your practice
-3. Start solving problems or implementing concepts
-4. Document your progress and learnings
+1. **Automated Setup** (Recommended):
+   ```bash
+   ./setup.sh
+   ```
+
+2. **Manual Setup**:
+   ```bash
+   python3 practice.py setup
+   ```
+
+3. **Start Your First Practice Session**:
+   ```bash
+   python3 practice.py start
+   ```
+
+4. **Complete and Track Progress**:
+   ```bash
+   python3 practice.py complete --notes "Your approach notes"
+   ```
+
+### 🤖 Automation Features
+This repository includes a powerful automation system that:
+- **Automatically selects problems** based on your preferences
+- **Generates solution files** with proper templates
+- **Tracks your progress** with detailed statistics
+- **Auto-commits to git** with meaningful messages
+- **Supports multiple languages** (Python, JavaScript, TypeScript, React)
+
+See [docs/AUTOMATION_GUIDE.md](docs/AUTOMATION_GUIDE.md) for complete documentation.
 
 ## 📊 Progress Tracking
 
