@@ -256,7 +256,10 @@ class PracticeManager:
     
     def get_template(self, problem, language):
         """Generate language-specific template"""
-        examples = json.loads(problem['examples']) if problem['examples'] else []
+        try:
+            examples = json.loads(problem['examples']) if problem['examples'] else []
+        except json.JSONDecodeError:
+            examples = []
         
         if language == "python":
             return f'''"""
@@ -394,12 +397,13 @@ testSolution();
         self.record_session_start(problem["id"], str(file_path))
         
         print(f"\n💡 Happy coding! Use 'python practice.py complete' when you're done.")
+        print(f"📂 File location: {file_path}")
         
-        # Open file in default editor (optional)
-        try:
-            subprocess.run(["open", str(file_path)], check=False)
-        except:
-            pass
+        # Auto-open disabled by default - uncomment next lines to enable
+        # try:
+        #     subprocess.run(["open", str(file_path)], check=False)
+        # except:
+        #     pass
     
     def record_session_start(self, problem_id, file_path):
         """Record the start of a practice session"""
