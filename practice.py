@@ -1046,6 +1046,224 @@ testSolution();
             
         except Exception as e:
             print(f"❌ Error during fetch: {e}")
+    
+    def show_due_reviews(self, limit=10, language=None):
+        """Show problems due for spaced repetition review"""
+        if not SpacedRepetitionManager:
+            print("❌ Spaced repetition system not available. Please ensure spaced_repetition.py exists.")
+            return
+        
+        if not language:
+            language = self.config["current_language"]
+        
+        sr_manager = SpacedRepetitionManager(self.db_path)
+        due_reviews = sr_manager.get_due_reviews(language, limit)
+        
+        if not due_reviews:
+            print(f"\n🎉 No reviews due! Great job staying on top of your studies.")
+            print(f"💡 Try adding more problems to your review schedule by solving new problems.")
+            return
+        
+        print(f"\n📚 Problems Due for Review ({language.title()})")
+        print("=" * 60)
+        
+        for i, review in enumerate(due_reviews, 1):
+            difficulty_emoji = {"easy": "🟢", "medium": "🟡", "hard": "🔴"}
+            
+            print(f"\n{i}. {review['title']}")
+            print(f"   {difficulty_emoji.get(review['difficulty'], '⚪')} Difficulty: {review['difficulty'].title()}")
+            print(f"   📚 Topic: {review['topic'].title()}")
+            print(f"   🏆 Platform: {review['platform'].title()}")
+            print(f"   📊 Review #: {review['review_count'] + 1}")
+            print(f"   ⏰ Overdue: {review['days_overdue']} days")
+            print(f"   🧠 Ease Factor: {review['ease_factor']:.2f}")
+            
+            if review.get('url'):
+                print(f"   🔗 URL: {review['url']}")
+        
+        print(f"\n💡 Use 'python3 practice.py review-session' to start reviewing these problems!")
+    
+    def start_review_session(self, target_time=30, language=None):
+        """Start a spaced repetition review session"""
+        if not SpacedRepetitionManager:
+            print("❌ Spaced repetition system not available. Please ensure spaced_repetition.py exists.")
+            return
+        
+        if not language:
+            language = self.config["current_language"]
+        
+        sr_manager = SpacedRepetitionManager(self.db_path)
+        session_problems = sr_manager.suggest_review_session(language, target_time)
+        
+        if not session_problems:
+            print(f"\n🎉 No reviews needed right now!")
+            print(f"💡 All your problems are scheduled for future review. Keep solving new problems!")
+            return
+        
+        print(f"\n⏰ {target_time}-Minute Review Session ({language.title()})")
+        print("=" * 60)
+        
+        total_time = 0
+        for i, problem in enumerate(session_problems, 1):
+            difficulty_emoji = {"easy": "🟢", "medium": "🟡", "hard": "🔴"}
+            
+            print(f"\n{i}. {problem['title']}")
+            print(f"   {difficulty_emoji.get(problem['difficulty'], '⚪')} Difficulty: {problem['difficulty'].title()}")
+            print(f"   📚 Topic: {problem['topic'].title()}")
+            print(f"   ⏱️  Estimated Time: {problem['estimated_time']} minutes")
+            print(f"   📊 Review #: {problem['review_count'] + 1}")
+            print(f"   ⏰ Overdue: {problem['days_overdue']} days")
+            
+            if problem.get('url'):
+                print(f"   🔗 URL: {problem['url']}")
+            
+            total_time += problem['estimated_time']
+        
+        print(f"\n📊 Session Summary:")
+        print(f"   🔢 Problems: {len(session_problems)}")
+        print(f"   ⏱️  Total Time: {total_time} minutes")
+        
+        print(f"\n🚀 Instructions:")
+        print(f"   1. Review each problem above")
+        print(f"   2. Try to solve them from memory")
+        print(f"   3. Rate your performance when done:")
+        print(f"      python3 practice.py review-complete <problem_id> <performance>")
+        print(f"   4. Performance ratings: excellent, good, fair, poor")
+    
+    def complete_review(self, problem_id, performance, time_spent=None, notes=None, language=None):
+        """Complete a review and update spaced repetition schedule"""
+        if not SpacedRepetitionManager:
+            print("❌ Spaced repetition system not available. Please ensure spaced_repetition.py exists.")
+            return
+        
+        if not language:
+            language = self.config["current_language"]
+        
+        # Validate problem exists
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute('SELECT title, difficulty, topic FROM problems WHERE id = ?', (problem_id,))
+        problem = cursor.fetchone()
+        conn.close()
+        
+        if not problem:
+            print(f"❌ Problem with ID {problem_id} not found.")
+            return
+        
+        sr_manager = SpacedRepetitionManager(self.db_path)
+        
+        try:
+            result = sr_manager.record_review_performance(
+                problem_id, performance, time_spent, notes, language
+            )
+            
+            performance_emoji = {
+                'excellent': '🌟',
+                'good': '👍',
+                'fair': '👌',
+                'poor': '😅'
+            }
+            
+            print(f"\n✅ Review Completed!")
+            print(f"📚 Problem: {problem[0]} ({problem[1]})")
+            print(f"{performance_emoji.get(performance, '📊')} Performance: {performance.title()}")
+            
+            if time_spent:
+                print(f"⏱️  Time Spent: {time_spent} minutes")
+            
+            print(f"📅 Next Review: {result['next_review_date']}")
+            print(f"⏰ Interval: {result['interval_days']} days")
+            print(f"🧠 Ease Factor: {result['ease_factor']:.2f}")
+            
+            if notes:
+                print(f"📝 Notes: {notes}")
+            
+            # Auto-commit if enabled
+            if self.config.get("auto_git", True):
+                try:
+                    subprocess.run(["git", "add", "."], check=True)
+                    commit_message = f"📚 Reviewed: {problem[0]} ({performance}) - {problem[2]}"
+                    subprocess.run(["git", "commit", "-m", commit_message], check=True)
+                    print("📝 Review committed to git")
+                except subprocess.CalledProcessError:
+                    pass  # Ignore git errors
+        
+        except ValueError as e:
+            print(f"❌ Error: {e}")
+        except Exception as e:
+            print(f"❌ Error recording review: {e}")
+    
+    def show_review_stats(self, language=None, days=30):
+        """Show spaced repetition statistics and insights"""
+        if not SpacedRepetitionManager:
+            print("❌ Spaced repetition system not available. Please ensure spaced_repetition.py exists.")
+            return
+        
+        if not language:
+            language = self.config["current_language"]
+        
+        sr_manager = SpacedRepetitionManager(self.db_path)
+        
+        # Get basic statistics
+        stats = sr_manager.get_review_statistics(language, days)
+        
+        print(f"\n🧠 Spaced Repetition Statistics ({language.title()})")
+        print("=" * 60)
+        print(f"📊 Total Problems in System: {stats['total_in_system']}")
+        print(f"🔴 Due for Review: {stats['due_count']}")
+        print(f"📅 Upcoming (Next 7 Days): {stats['upcoming_count']}")
+        print(f"🧠 Average Ease Factor: {stats['avg_ease_factor']:.2f}")
+        
+        # Performance breakdown
+        if stats['performance_stats']:
+            print(f"\n📈 Review Performance (Last {days} Days):")
+            total_reviews = sum(stats['performance_stats'].values())
+            
+            performance_emoji = {
+                'excellent': '🌟',
+                'good': '👍',
+                'fair': '👌',
+                'poor': '😅'
+            }
+            
+            for performance, count in stats['performance_stats'].items():
+                percentage = (count / total_reviews) * 100 if total_reviews > 0 else 0
+                emoji = performance_emoji.get(performance, '📊')
+                print(f"   {emoji} {performance.title()}: {count} ({percentage:.1f}%)")
+        
+        # Get retention insights
+        insights = sr_manager.get_retention_insights(language)
+        
+        if insights['topic_retention']:
+            print(f"\n📚 Topic Retention Analysis:")
+            sorted_topics = sorted(
+                insights['topic_retention'].items(),
+                key=lambda x: x[1]['avg_ease'],
+                reverse=True
+            )
+            
+            for topic, data in sorted_topics[:5]:  # Top 5 topics
+                if data['problems'] >= 2:  # Only show topics with multiple problems
+                    print(f"   📖 {topic.title()}: {data['avg_ease']:.2f} ease factor ({data['problems']} problems)")
+        
+        if insights['difficulty_retention']:
+            print(f"\n🎯 Difficulty Retention Analysis:")
+            for difficulty, data in insights['difficulty_retention'].items():
+                if data['problems'] >= 2:
+                    print(f"   🎯 {difficulty.title()}: {data['avg_ease']:.2f} ease factor ({data['problems']} problems)")
+        
+        # Recommendations
+        print(f"\n💡 Recommendations:")
+        if stats['due_count'] > 0:
+            print(f"   📚 You have {stats['due_count']} problems due for review!")
+            print(f"   🚀 Run 'python3 practice.py review-session' to start reviewing")
+        else:
+            print(f"   🎉 All caught up with reviews! Keep solving new problems.")
+        
+        if stats['avg_ease_factor'] < 2.0:
+            print(f"   🧠 Your average ease factor is low. Focus on understanding concepts deeply.")
+        elif stats['avg_ease_factor'] > 2.8:
+            print(f"   🌟 Excellent retention! Consider tackling harder problems.")
 
 def main():
     parser = argparse.ArgumentParser(description="Automated Coding Practice CLI")
@@ -1116,6 +1334,26 @@ def main():
     recommend_parser.add_argument('--language', default='python', help='Programming language')
     recommend_parser.add_argument('--daily', action='store_true', help='Get daily challenge')
     
+    # Review commands for spaced repetition
+    review_due_parser = subparsers.add_parser('review-due', help='Show problems due for review')
+    review_due_parser.add_argument('--limit', type=int, default=10, help='Maximum number of problems to show')
+    review_due_parser.add_argument('--language', default='python', help='Programming language')
+    
+    review_session_parser = subparsers.add_parser('review-session', help='Start a spaced repetition review session')
+    review_session_parser.add_argument('--time', type=int, default=30, help='Target session time in minutes')
+    review_session_parser.add_argument('--language', default='python', help='Programming language')
+    
+    review_complete_parser = subparsers.add_parser('review-complete', help='Complete a review with performance rating')
+    review_complete_parser.add_argument('problem_id', type=int, help='Problem ID that was reviewed')
+    review_complete_parser.add_argument('performance', choices=['excellent', 'good', 'fair', 'poor'], help='Review performance')
+    review_complete_parser.add_argument('--time', type=int, help='Time spent in minutes')
+    review_complete_parser.add_argument('--notes', help='Review notes')
+    review_complete_parser.add_argument('--language', default='python', help='Programming language')
+    
+    review_stats_parser = subparsers.add_parser('review-stats', help='Show spaced repetition statistics')
+    review_stats_parser.add_argument('--language', default='python', help='Programming language')
+    review_stats_parser.add_argument('--days', type=int, default=30, help='Days to analyze')
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -1148,6 +1386,14 @@ def main():
         manager.visualize_progress(args.days, args.language, args.charts, args.export)
     elif args.command == 'recommend':
         manager.get_recommendations(args.count, args.topic, args.language, args.daily)
+    elif args.command == 'review-due':
+        manager.show_due_reviews(args.limit, args.language)
+    elif args.command == 'review-session':
+        manager.start_review_session(args.time, args.language)
+    elif args.command == 'review-complete':
+        manager.complete_review(args.problem_id, args.performance, args.time, args.notes, args.language)
+    elif args.command == 'review-stats':
+        manager.show_review_stats(args.language, args.days)
 
 if __name__ == "__main__":
     main() 

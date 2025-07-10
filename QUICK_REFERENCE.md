@@ -15,6 +15,14 @@ preview    # Review problems from N days ago
 preset     # Reset progress or database
 pexport    # Export data to JSON/CSV
 pimport    # Import problems from files
+
+# NEW: Smart recommendations
+precommend # Get personalized problem recommendations
+
+# NEW: Spaced repetition system
+preview-due     # Show problems due for review
+preview-session # Start review session
+preview-stats   # Review system statistics
 ```
 
 ## **📋 Core Commands**
@@ -36,13 +44,41 @@ python3 practice.py import problems.csv --format csv
 
 ### **Practice Session**
 ```bash
-# Start with filters
+# Start with filters and smart recommendations
 python3 practice.py start --topic arrays --difficulty easy
-python3 practice.py start --language python --mode random
+python3 practice.py start --language python --mode smart  # 🆕 AI-powered selection
+python3 practice.py start --mode random
 
 # Complete with enhanced tracking
 python3 practice.py complete --time 15 --notes "Used two-pointer approach"
 python3 practice.py complete --notes "Optimized with hash table"
+```
+
+### **🆕 Smart Recommendations**
+```bash
+# Get personalized recommendations
+python3 practice.py recommend --count 5
+python3 practice.py recommend --topic arrays --count 3
+python3 practice.py recommend --daily  # Daily challenge
+
+# Start practice with smart selection
+python3 practice.py start --mode smart  # Uses AI recommendations
+```
+
+### **🆕 Spaced Repetition System**
+```bash
+# Check what's due for review
+python3 practice.py review-due --limit 10
+
+# Start a review session
+python3 practice.py review-session --time 30  # 30-minute session
+
+# Complete a review with performance rating
+python3 practice.py review-complete 15 excellent --time 10 --notes "Solved quickly"
+python3 practice.py review-complete 23 fair --time 25
+
+# View review statistics and retention analysis
+python3 practice.py review-stats --days 30
 ```
 
 ### **Advanced Analytics & Visualization**
@@ -54,7 +90,7 @@ python3 practice.py stats
 python3 practice.py visualize --charts --export --days 30
 python3 practice.py visualize --language python --days 7
 
-# Review for spaced repetition
+# Review for spaced repetition (different from review-due)
 python3 practice.py review --days 7
 python3 practice.py review --days 14
 ```
@@ -92,163 +128,100 @@ python3 practice.py reset --progress --confirm
 
 # Reset everything (destructive)
 python3 practice.py reset --all --confirm
-
-# Safe reset with prompt
-python3 practice.py reset --progress
 ```
 
-## **📈 Progress Tracking Features**
+## **🆕 New Features Overview**
 
-### **Enhanced Statistics**
-- **Comprehensive summaries** with emoji indicators
-- **Difficulty breakdown** analysis
-- **Topic distribution** insights
-- **Performance recommendations** based on patterns
-- **Recent activity** tracking
-- **Time analytics** with averages
+### **Smart Recommendation Engine**
+- **Personalized suggestions** based on your progress and performance
+- **Difficulty progression** that adapts to your skill level
+- **Topic mastery tracking** to identify weak areas
+- **Learning path optimization** for systematic improvement
 
-### **Visual Charts** (requires matplotlib)
-- **Daily Progress**: Line chart of problems solved over time
-- **Difficulty Distribution**: Pie chart of easy/medium/hard ratios
-- **Topic Distribution**: Bar chart of most practiced topics
+### **Spaced Repetition System**
+- **Intelligent review scheduling** based on forgetting curves
+- **Performance-based intervals** that adapt to your retention
+- **Retention analysis** to identify problem areas
+- **Optimized review sessions** for maximum efficiency
 
-### **Smart Insights**
-- Automatic difficulty balance recommendations
-- Topic diversity suggestions
-- Consistency tracking and motivation
-- Performance trend analysis
+### **Enhanced Analytics**
+- **Visual progress charts** with matplotlib integration
+- **Comprehensive insights** and recommendations
+- **Topic and difficulty analysis** with retention metrics
+- **Performance trends** over time
 
-## **🎯 Example Workflows**
+## **🎯 Recommended Workflows**
 
 ### **Daily Practice Routine**
 ```bash
-# 1. Check today's recommendation
-pstats
+# 1. Check for due reviews first
+python3 practice.py review-due
 
-# 2. Start focused practice
-pstart --topic arrays --difficulty easy
+# 2. If reviews available, do a quick session
+python3 practice.py review-session --time 15
 
-# 3. Complete with time tracking
-pcomplete --time 20 --notes "Learned sliding window technique"
+# 3. Get smart recommendation for new problem
+python3 practice.py recommend --daily
 
-# 4. Weekly review (Fridays)
-preview --days 7
+# 4. Start practice with smart selection
+python3 practice.py start --mode smart
+
+# 5. Complete and track progress
+python3 practice.py complete --time 20 --notes "Your approach"
 ```
 
-### **Weekly Analysis**
+### **Weekly Review Process**
 ```bash
-# Generate comprehensive report
-pvisualize --charts --export --days 7
+# 1. Check overall progress
+python3 practice.py stats
 
-# Review last week's problems
-preview --days 7
+# 2. Analyze retention patterns
+python3 practice.py review-stats --days 7
 
-# Check progress trends
-pstats
+# 3. Generate visual reports
+python3 practice.py visualize --charts --days 7
+
+# 4. Get topic-specific recommendations
+python3 practice.py recommend --topic "your-weak-topic" --count 5
 ```
 
-### **Problem Management**
+### **Performance Optimization**
 ```bash
-# Fetch new problems monthly
-pfetch --source leetcode --limit 50
+# 1. Identify weak areas
+python3 practice.py review-stats --days 30
 
-# List pending problems by topic
-plist --topic dynamic-programming --status pending
+# 2. Get targeted recommendations
+python3 practice.py recommend --topic arrays --count 3
 
-# Export progress for sharing
-pexport --format json
+# 3. Practice with smart selection
+python3 practice.py start --mode smart --topic arrays
+
+# 4. Track improvement over time
+python3 practice.py visualize --days 30 --export
 ```
 
-## **⚡ Performance Features**
+## **📈 Performance Ratings Guide**
 
-### **Database Optimizations**
-- **90% faster** query performance with strategic indexes
-- **Batch operations** for efficient data handling
-- **Connection pooling** for reduced overhead
-- **Optimized JOIN** operations
+When completing reviews, use these performance ratings:
 
-### **Enhanced CLI**
-- **Intelligent caching** for faster responses
-- **Parallel processing** for bulk operations
-- **Progress indicators** for long-running tasks
-- **Graceful error handling** with helpful messages
+- **excellent**: Solved quickly and correctly, remembered approach clearly
+- **good**: Solved correctly with minor hesitation or small mistakes
+- **fair**: Solved but took longer than expected or needed hints
+- **poor**: Struggled significantly or couldn't solve without help
 
-### **External Integration**
-- **LeetCode API** integration for fresh problems
-- **Rate limiting** to respect API limits
-- **Offline fallback** for uninterrupted practice
-- **Smart topic mapping** for automatic categorization
+## **🎮 Gamification Elements**
 
-## **🔍 Advanced Filters & Options**
-
-### **Problem Selection**
-```bash
-# Topic-based practice
---topic arrays|strings|trees|graphs|dp|greedy|backtracking
-
-# Difficulty progression
---difficulty easy|medium|hard
-
-# Language-specific tracking
---language python|javascript|typescript|react
-
-# Selection modes
---mode sequential|random|topic
-```
-
-### **Time-based Analysis**
-```bash
-# Custom time ranges
---days 7|14|30|90
-
-# Review intervals
---days 1    # Yesterday's problems
---days 3    # 3 days ago (spaced repetition)
---days 7    # Weekly review
---days 14   # Bi-weekly reinforcement
-```
-
-## **📚 Pro Tips**
-
-### **Optimization Strategies**
-1. **Use `pvisualize --charts`** weekly for visual progress tracking
-2. **Set up `preview --days 7`** for spaced repetition learning
-3. **Export data regularly** with `pexport` for backup
-4. **Fetch new problems** monthly with `pfetch --source leetcode`
-5. **Use topic filters** to focus on weak areas
-
-### **Performance Tracking**
-- **Track time consistently** for accurate analytics
-- **Add meaningful notes** for future reference
-- **Review insights** from `pstats` for improvement areas
-- **Use charts** to visualize progress trends
-- **Set up regular review** sessions for retention
-
-### **System Maintenance**
-- **Regular exports** for data backup
-- **Periodic database optimization** with reset if needed
-- **Update problem sets** with fresh content from APIs
-- **Monitor performance** with built-in analytics
+- **Ease factors**: Track how well you retain each problem (1.3-3.0)
+- **Review streaks**: Maintain consistent review habits
+- **Topic mastery**: Build expertise in specific areas
+- **Difficulty progression**: Gradually tackle harder problems
+- **Milestone tracking**: Celebrate achievements with git tags
 
 ---
 
-## **🎉 Quick Start (New Users)**
-
-```bash
-# 1. Setup everything
-python3 practice.py setup
-
-# 2. Fetch comprehensive problem set
-python3 practice.py fetch --source all --limit 100
-
-# 3. Start your first session
-python3 practice.py start --topic arrays --difficulty easy
-
-# 4. Complete and track
-python3 practice.py complete --time 25 --notes "First problem solved!"
-
-# 5. Check your progress
-python3 practice.py visualize --charts
-```
-
-**Happy Coding! 🚀** 
+**🚀 Pro Tips:**
+- Use `--mode smart` for AI-powered problem selection
+- Complete reviews daily to maintain optimal retention
+- Focus on understanding rather than just solving
+- Use visualization to track long-term progress
+- Export data regularly for backup and analysis 
