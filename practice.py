@@ -27,6 +27,12 @@ except ImportError:
     print("⚠️  Progress visualizer module not found. Basic stats only.")
     ProgressVisualizer = None
 
+try:
+    from recommendation_engine import RecommendationEngine
+except ImportError:
+    print("⚠️  Recommendation engine module not found. Basic problem selection only.")
+    RecommendationEngine = None
+
 class PracticeManager:
     def __init__(self):
         self.root_dir = Path.cwd()
