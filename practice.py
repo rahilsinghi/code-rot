@@ -15,6 +15,18 @@ from pathlib import Path
 import random
 from typing import Dict, List, Optional, Tuple
 
+try:
+    from problem_fetcher import ProblemFetcher
+except ImportError:
+    print("⚠️  Problem fetcher module not found. Some features may be limited.")
+    ProblemFetcher = None
+
+try:
+    from progress_visualizer import ProgressVisualizer
+except ImportError:
+    print("⚠️  Progress visualizer module not found. Basic stats only.")
+    ProgressVisualizer = None
+
 class PracticeManager:
     def __init__(self):
         self.root_dir = Path.cwd()
@@ -108,7 +120,33 @@ class PracticeManager:
     
     def populate_initial_problems(self):
         """Populate database with initial set of problems"""
-        initial_problems = [
+        print("🔄 Setting up practice database...")
+        
+        # Check if problems already exist
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM problems')
+        existing_count = cursor.fetchone()[0]
+        conn.close()
+        
+        if existing_count > 0:
+            print(f"📚 Database already contains {existing_count} problems.")
+            response = input("Do you want to add more problems? (y/n): ")
+            if response.lower() != 'y':
+                print("Setup complete - using existing problems.")
+                return
+        
+        # Use the fetcher if available, otherwise fall back to basic problems
+        if ProblemFetcher:
+            print("🚀 Using enhanced problem fetcher...")
+            self.fetch_problems('all', 30, force=True)
+        else:
+            print("📝 Adding basic problem set...")
+            self._add_basic_problems()
+    
+    def _add_basic_problems(self):
+        """Fallback method to add basic problems if fetcher is not available"""
+        basic_problems = [
             {
                 "title": "Two Sum",
                 "slug": "two-sum",
@@ -116,78 +154,45 @@ class PracticeManager:
                 "topic": "arrays",
                 "platform": "leetcode",
                 "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
-                "examples": '[{"input": "nums = [2,7,11,15], target = 9", "output": "[0,1]", "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."}]',
-                "constraints": "2 <= nums.length <= 10^4\n-10^9 <= nums[i] <= 10^9\n-10^9 <= target <= 10^9\nOnly one valid answer exists.",
+                "examples": "[]",
+                "constraints": "",
+                "hints": "",
                 "url": "https://leetcode.com/problems/two-sum/",
                 "tags": "array,hash-table"
             },
             {
-                "title": "Valid Parentheses",
-                "slug": "valid-parentheses",
-                "difficulty": "easy",
-                "topic": "stacks",
+                "title": "Reverse String",
+                "slug": "reverse-string",
+                "difficulty": "easy", 
+                "topic": "strings",
                 "platform": "leetcode",
-                "description": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.",
-                "examples": '[{"input": "s = \\"()\\""", "output": "true"}, {"input": "s = \\"()[]{}\\"", "output": "true"}, {"input": "s = \\"(]\\"", "output": "false"}]',
-                "constraints": "1 <= s.length <= 10^4\ns consists of parentheses only '()[]{}'.",
-                "url": "https://leetcode.com/problems/valid-parentheses/",
-                "tags": "string,stack"
-            },
-            {
-                "title": "Merge Two Sorted Lists",
-                "slug": "merge-two-sorted-lists",
-                "difficulty": "easy",
-                "topic": "linked-lists",
-                "platform": "leetcode",
-                "description": "You are given the heads of two sorted linked lists list1 and list2. Merge the two lists in a one sorted list.",
-                "examples": '[{"input": "list1 = [1,2,4], list2 = [1,3,4]", "output": "[1,1,2,3,4,4]"}]',
-                "constraints": "The number of nodes in both lists is in the range [0, 50].\n-100 <= Node.val <= 100\nBoth list1 and list2 are sorted in non-decreasing order.",
-                "url": "https://leetcode.com/problems/merge-two-sorted-lists/",
-                "tags": "linked-list,recursion"
-            },
-            {
-                "title": "Maximum Subarray",
-                "slug": "maximum-subarray",
-                "difficulty": "medium",
-                "topic": "arrays",
-                "platform": "leetcode",
-                "description": "Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.",
-                "examples": '[{"input": "nums = [-2,1,-3,4,-1,2,1,-5,4]", "output": "6", "explanation": "[4,-1,2,1] has the largest sum = 6."}]',
-                "constraints": "1 <= nums.length <= 10^5\n-10^4 <= nums[i] <= 10^4",
-                "url": "https://leetcode.com/problems/maximum-subarray/",
-                "tags": "array,divide-and-conquer,dynamic-programming"
-            },
-            {
-                "title": "Climbing Stairs",
-                "slug": "climbing-stairs",
-                "difficulty": "easy",
-                "topic": "dynamic-programming",
-                "platform": "leetcode",
-                "description": "You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
-                "examples": '[{"input": "n = 2", "output": "2", "explanation": "There are two ways to climb to the top: 1. 1 step + 1 step 2. 2 steps"}, {"input": "n = 3", "output": "3", "explanation": "There are three ways to climb to the top: 1. 1 step + 1 step + 1 step 2. 1 step + 2 steps 3. 2 steps + 1 step"}]',
-                "constraints": "1 <= n <= 45",
-                "url": "https://leetcode.com/problems/climbing-stairs/",
-                "tags": "math,dynamic-programming,memoization"
+                "description": "Write a function that reverses a string. The input string is given as an array of characters s.",
+                "examples": "[]",
+                "constraints": "",
+                "hints": "",
+                "url": "https://leetcode.com/problems/reverse-string/",
+                "tags": "two-pointers,string"
             }
         ]
         
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        for problem in initial_problems:
+        for problem in basic_problems:
             cursor.execute('''
                 INSERT OR IGNORE INTO problems 
-                (title, slug, difficulty, topic, platform, description, examples, constraints, url, tags)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (title, slug, difficulty, topic, platform, description, examples, constraints, hints, url, tags)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                problem["title"], problem["slug"], problem["difficulty"], 
-                problem["topic"], problem["platform"], problem["description"],
-                problem["examples"], problem["constraints"], problem["url"], problem["tags"]
+                problem['title'], problem['slug'], problem['difficulty'],
+                problem['topic'], problem['platform'], problem['description'],
+                problem['examples'], problem['constraints'], problem['hints'],
+                problem['url'], problem['tags']
             ))
         
         conn.commit()
         conn.close()
-        print(f"✅ Populated database with {len(initial_problems)} initial problems")
+        print(f"✅ Added {len(basic_problems)} basic problems")
     
     def get_next_problem(self, topic=None, difficulty=None, selection_mode="sequential"):
         """Get next problem based on criteria"""
@@ -530,65 +535,67 @@ testSolution();
     
     def show_stats(self):
         """Display practice statistics"""
+        # Use enhanced visualizer if available, otherwise basic stats
+        if ProgressVisualizer:
+            visualizer = ProgressVisualizer(self.db_path)
+            visualizer.print_progress_summary(30, self.config["current_language"])
+            return
+        
+        # Fallback to basic stats
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        # Overall stats
+        # Basic statistics
         cursor.execute('''
             SELECT 
-                COUNT(*) as total,
-                SUM(CASE WHEN p.difficulty = 'easy' THEN 1 ELSE 0 END) as easy,
-                SUM(CASE WHEN p.difficulty = 'medium' THEN 1 ELSE 0 END) as medium,
-                SUM(CASE WHEN p.difficulty = 'hard' THEN 1 ELSE 0 END) as hard
+                COUNT(DISTINCT pr.problem_id) as completed,
+                COUNT(CASE WHEN p.difficulty = 'easy' THEN 1 END) as easy,
+                COUNT(CASE WHEN p.difficulty = 'medium' THEN 1 END) as medium,
+                COUNT(CASE WHEN p.difficulty = 'hard' THEN 1 END) as hard,
+                AVG(pr.time_spent) as avg_time
             FROM progress pr
             JOIN problems p ON pr.problem_id = p.id
-            WHERE pr.status = 'completed'
-        ''')
+            WHERE pr.status = 'completed' AND pr.language = ?
+        ''', (self.config["current_language"],))
         
         stats = cursor.fetchone()
         
-        # Topic breakdown
-        cursor.execute('''
-            SELECT p.topic, COUNT(*) as count
-            FROM progress pr
-            JOIN problems p ON pr.problem_id = p.id
-            WHERE pr.status = 'completed'
-            GROUP BY p.topic
-            ORDER BY count DESC
-        ''')
-        
-        topics = cursor.fetchall()
-        
-        # Recent activity
-        cursor.execute('''
-            SELECT p.title, p.difficulty, pr.completed_at
-            FROM progress pr
-            JOIN problems p ON pr.problem_id = p.id
-            WHERE pr.status = 'completed'
-            ORDER BY pr.completed_at DESC
-            LIMIT 5
-        ''')
-        
-        recent = cursor.fetchall()
-        conn.close()
-        
-        print("\n📊 Practice Statistics")
+        print(f"\n📊 Practice Statistics ({self.config['current_language'].title()})")
         print("=" * 50)
-        print(f"Total Problems Solved: {stats[0]}")
-        print(f"  Easy: {stats[1]}")
-        print(f"  Medium: {stats[2]}")
-        print(f"  Hard: {stats[3]}")
+        print(f"✅ Problems Completed: {stats[0] or 0}")
+        print(f"🟢 Easy: {stats[1] or 0}")
+        print(f"🟡 Medium: {stats[2] or 0}")
+        print(f"🔴 Hard: {stats[3] or 0}")
+        print(f"⏱️  Average Time: {stats[4]:.1f} minutes" if stats[4] else "⏱️  Average Time: N/A")
         
-        if topics:
-            print(f"\n📚 By Topic:")
-            for topic, count in topics:
-                print(f"  {topic.title()}: {count}")
+        conn.close()
+    
+    def visualize_progress(self, days=30, language=None, create_charts=False, export_report=False):
+        """Generate enhanced progress visualizations and reports"""
+        if not ProgressVisualizer:
+            print("❌ Progress visualizer not available. Please ensure progress_visualizer.py exists.")
+            return
         
-        if recent:
-            print(f"\n🕐 Recent Activity:")
-            for title, difficulty, completed_at in recent:
-                date = datetime.fromisoformat(completed_at).strftime("%Y-%m-%d")
-                print(f"  {title} ({difficulty}) - {date}")
+        if not language:
+            language = self.config["current_language"]
+        
+        visualizer = ProgressVisualizer(self.db_path)
+        
+        # Always show text summary
+        visualizer.print_progress_summary(days, language)
+        
+        # Generate charts if requested
+        if create_charts:
+            print(f"\n🎨 Generating visual charts...")
+            success = visualizer.create_progress_charts(days, language)
+            if success:
+                print(f"✅ Charts saved to practice_data/charts/")
+        
+        # Export report if requested
+        if export_report:
+            print(f"\n📄 Exporting detailed report...")
+            report_file = visualizer.export_report(days, language)
+            print(f"✅ Report saved to {report_file}")
     
     def list_problems(self, topic=None, difficulty=None, status=None, limit=20):
         """List problems with optional filters"""
@@ -821,6 +828,83 @@ testSolution();
             print(f"   Completed: {completed_at}")
         
         print(f"\n💡 Consider revisiting these {len(problems)} problems to reinforce your learning!")
+    
+    def fetch_problems(self, source='sample', limit=50, force=False):
+        """Fetch new problems from external sources"""
+        if not ProblemFetcher:
+            print("❌ Problem fetcher not available. Please ensure problem_fetcher.py exists.")
+            return
+        
+        # Check if we already have problems and force is not set
+        if not force:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            cursor.execute('SELECT COUNT(*) FROM problems')
+            count = cursor.fetchone()[0]
+            conn.close()
+            
+            if count > 0:
+                response = input(f"📚 Database already contains {count} problems. Fetch more? (y/n): ")
+                if response.lower() != 'y':
+                    print("Fetch cancelled.")
+                    return
+        
+        fetcher = ProblemFetcher()
+        problems = []
+        
+        try:
+            if source == 'sample' or source == 'all':
+                sample_problems = fetcher.fetch_sample_problems()
+                problems.extend(sample_problems)
+            
+            if source == 'leetcode' or source == 'all':
+                print("🔄 Fetching from LeetCode API...")
+                leetcode_problems = fetcher.fetch_leetcode_problems(limit)
+                problems.extend(leetcode_problems)
+            
+            if not problems:
+                print("❌ No problems fetched.")
+                return
+            
+            # Insert problems into database
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            inserted_count = 0
+            skipped_count = 0
+            
+            for problem in problems:
+                try:
+                    cursor.execute('''
+                        INSERT OR IGNORE INTO problems 
+                        (title, slug, difficulty, topic, platform, description, examples, constraints, hints, url, tags)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (
+                        problem['title'], problem['slug'], problem['difficulty'],
+                        problem['topic'], problem['platform'], problem['description'],
+                        problem['examples'], problem['constraints'], problem.get('hints', ''),
+                        problem['url'], problem['tags']
+                    ))
+                    
+                    if cursor.rowcount > 0:
+                        inserted_count += 1
+                    else:
+                        skipped_count += 1
+                        
+                except Exception as e:
+                    print(f"⚠️  Error inserting {problem['title']}: {e}")
+                    skipped_count += 1
+            
+            conn.commit()
+            conn.close()
+            
+            print(f"\n✅ Fetch complete!")
+            print(f"   📥 Inserted: {inserted_count} new problems")
+            print(f"   ⏭️  Skipped: {skipped_count} duplicates")
+            print(f"   📊 Total in database: {inserted_count + skipped_count}")
+            
+        except Exception as e:
+            print(f"❌ Error during fetch: {e}")
 
 def main():
     parser = argparse.ArgumentParser(description="Automated Coding Practice CLI")
@@ -871,6 +955,19 @@ def main():
     review_parser = subparsers.add_parser('review', help='Review previously solved problems')
     review_parser.add_argument('--days', type=int, default=7, help='Review problems from N days ago')
     
+    # Fetch command
+    fetch_parser = subparsers.add_parser('fetch', help='Fetch new problems from external APIs')
+    fetch_parser.add_argument('--source', choices=['leetcode', 'sample', 'all'], default='sample', help='Source to fetch from')
+    fetch_parser.add_argument('--limit', type=int, default=50, help='Number of problems to fetch')
+    fetch_parser.add_argument('--force', action='store_true', help='Force fetch even if problems exist')
+    
+    # Visualize command
+    visualize_parser = subparsers.add_parser('visualize', help='Generate progress visualizations and reports')
+    visualize_parser.add_argument('--days', type=int, default=30, help='Number of days to analyze')
+    visualize_parser.add_argument('--language', default='python', help='Programming language to analyze')
+    visualize_parser.add_argument('--charts', action='store_true', help='Generate visual charts (requires matplotlib)')
+    visualize_parser.add_argument('--export', action='store_true', help='Export report to JSON')
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -897,6 +994,10 @@ def main():
         manager.import_problems(args.file, args.format)
     elif args.command == 'review':
         manager.review_problems(args.days)
+    elif args.command == 'fetch':
+        manager.fetch_problems(args.source, args.limit, args.force)
+    elif args.command == 'visualize':
+        manager.visualize_progress(args.days, args.language, args.charts, args.export)
 
 if __name__ == "__main__":
     main() 

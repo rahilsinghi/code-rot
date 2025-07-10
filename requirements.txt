@@ -1,52 +1,40 @@
-# No external dependencies required - using only Python built-in modules
-# sqlite3 is included with Python
-# All other modules are part of the standard library 
+# Core scientific computing
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
 
-# Core Data Science & Algorithm Libraries
-numpy>=1.24.0              # Numerical computing, arrays, mathematical operations
-pandas>=2.0.0               # Data manipulation and analysis
-matplotlib>=3.7.0           # Plotting and visualization
-seaborn>=0.12.0             # Statistical data visualization
-scipy>=1.10.0               # Scientific computing and algorithms
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
 
-# Testing & Debugging
-pytest>=7.4.0               # Testing framework
-pytest-cov>=4.1.0           # Coverage testing
-ipdb>=0.13.0                # Interactive debugger
-memory-profiler>=0.61.0     # Memory usage profiling
+# Data structures and algorithms
+sortedcontainers>=2.4.0
+networkx>=3.0
+more-itertools>=9.0.0
 
-# Code Quality & Formatting
-black>=23.0.0               # Code formatter
-flake8>=6.0.0               # Linting
-isort>=5.12.0               # Import sorting
+# Testing and debugging
+pytest>=7.0.0
+pytest-cov>=4.0.0
+ipdb>=0.13.0
+memory-profiler>=0.60.0
 
-# Jupyter & Interactive Development
-jupyter>=1.0.0              # Jupyter notebooks for experimentation
-ipython>=8.14.0             # Enhanced interactive Python shell
+# Code quality and formatting
+black>=23.0.0
+flake8>=6.0.0
+isort>=5.12.0
 
-# Graph & Tree Algorithms
-networkx>=3.1               # Graph algorithms and data structures
-graphviz>=0.20.0            # Graph visualization
+# CLI and utilities
+rich>=13.0.0
+click>=8.1.0
+tqdm>=4.65.0
 
-# Performance & Optimization (Note: numba may not support Python 3.13 yet)
-# numba>=0.57.0             # Just-in-time compilation for faster code
-# cython>=3.0.0             # C extensions for Python
+# Interactive development
+jupyter>=1.0.0
+ipython>=8.0.0
 
-# Data Structures & Algorithms
-sortedcontainers>=2.4.0     # Sorted list, dict, set implementations
-# Note: heapq, collections, bisect are built-in modules
+# Web scraping and requests (for problem fetching)
+requests>=2.31.0
+beautifulsoup4>=4.12.0
 
-# String & Text Processing
-regex>=2023.6.0             # Advanced regular expressions
-
-# Utility Libraries
-tqdm>=4.65.0                # Progress bars
-rich>=13.4.0                # Rich text and beautiful formatting in terminal
-click>=8.1.0                # Command line interface creation
-
-# Web Scraping (for fetching problems)
-requests>=2.31.0            # HTTP library
-beautifulsoup4>=4.12.0      # HTML/XML parsing
-
-# Competitive Programming Utilities
-more-itertools>=10.1.0      # Additional iterator functions 
+# Text processing
+regex>=2023.0.0 
