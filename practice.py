@@ -33,6 +33,12 @@ except ImportError:
     print("⚠️  Recommendation engine module not found. Basic problem selection only.")
     RecommendationEngine = None
 
+try:
+    from spaced_repetition import SpacedRepetitionManager
+except ImportError:
+    print("⚠️  Spaced repetition module not found. Review features limited.")
+    SpacedRepetitionManager = None
+
 class PracticeManager:
     def __init__(self):
         self.root_dir = Path.cwd()
@@ -99,6 +105,11 @@ class PracticeManager:
         
         conn.commit()
         conn.close()
+        
+        # Initialize spaced repetition system if available
+        if SpacedRepetitionManager:
+            sr_manager = SpacedRepetitionManager(self.db_path)
+            sr_manager.init_review_system()
     
     def load_config(self):
         """Load or create configuration"""
@@ -201,7 +212,23 @@ class PracticeManager:
         print(f"✅ Added {len(basic_problems)} basic problems")
     
     def get_next_problem(self, topic=None, difficulty=None, selection_mode="sequential"):
-        """Get next problem based on criteria"""
+        """Get next problem based on criteria with smart recommendations"""
+        # Try to use smart recommendations if available
+        if RecommendationEngine and selection_mode == "smart":
+            engine = RecommendationEngine(self.db_path)
+            if topic:
+                recommendations = engine.get_topic_recommendations(topic, self.config["current_language"], 1)
+            else:
+                recommendations = engine.get_personalized_recommendations(self.config["current_language"], 1)
+            
+            if recommendations:
+                problem = recommendations[0]
+                # Add recommendation info for display
+                problem['is_recommended'] = True
+                problem['recommendation_reasons'] = problem.get('recommendation_reasons', [])
+                return problem
+        
+        # Fallback to original logic
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
@@ -243,7 +270,8 @@ class PracticeManager:
                 "constraints": problem[8],
                 "hints": problem[9],
                 "url": problem[10],
-                "tags": problem[11]
+                "tags": problem[11],
+                "is_recommended": False
             }
         return None
     
@@ -400,24 +428,61 @@ testSolution();
         
         problem = self.get_next_problem(topic, difficulty, selection_mode)
         if not problem:
-            print("🎉 No more problems found matching your criteria!")
+            print("\n❌ No problems found matching your criteria.")
+            print("💡 Try:")
+            print("   - Removing filters")
+            print("   - Running 'python3 practice.py fetch' to get more problems")
+            print("   - Using 'python3 practice.py setup' to populate initial problems")
             return
         
-        print(f"\n🚀 Starting practice session...")
-        print(f"📚 Problem: {problem['title']}")
-        print(f"🎯 Difficulty: {problem['difficulty'].title()}")
-        print(f"📂 Topic: {problem['topic'].title()}")
-        print(f"🔗 URL: {problem['url']}")
+        # Enhanced problem display
+        difficulty_emoji = {"easy": "🟢", "medium": "🟡", "hard": "🔴"}
+        
+        print(f"\n{'='*60}")
+        print(f"📝 PROBLEM: {problem['title']}")
+        print(f"{'='*60}")
+        print(f"{difficulty_emoji.get(problem['difficulty'], '⚪')} Difficulty: {problem['difficulty'].title()}")
+        print(f"📚 Topic: {problem['topic'].title()}")
+        print(f"🏆 Platform: {problem['platform'].title()}")
+        
+        # Show recommendation info if available
+        if problem.get('is_recommended') and problem.get('recommendation_reasons'):
+            print(f"🎯 Recommended: {', '.join(problem['recommendation_reasons'])}")
+        
+        if problem.get('url'):
+            print(f"🔗 URL: {problem['url']}")
+        
+        print(f"\n📖 Description:")
+        print(problem['description'])
+        
+        if problem.get('examples'):
+            try:
+                examples = json.loads(problem['examples'])
+                if examples:
+                    print(f"\n💡 Examples:")
+                    for i, example in enumerate(examples, 1):
+                        print(f"  Example {i}:")
+                        if isinstance(example, dict):
+                            for key, value in example.items():
+                                print(f"    {key}: {value}")
+                        else:
+                            print(f"    {example}")
+            except (json.JSONDecodeError, TypeError):
+                if problem['examples'].strip():
+                    print(f"\n💡 Examples: {problem['examples']}")
+        
+        if problem.get('constraints'):
+            print(f"\n⚠️  Constraints:")
+            print(problem['constraints'])
         
         # Generate problem file
         file_path = self.generate_problem_file(problem, self.config["current_language"])
-        print(f"📝 Generated file: {file_path}")
         
         # Record session start
         self.record_session_start(problem["id"], str(file_path))
         
-        print(f"\n💡 Happy coding! Use 'python practice.py complete' when you're done.")
-        print(f"📂 File location: {file_path}")
+        print(f"\n✅ Generated solution file: {file_path}")
+        print(f"\n🚀 Happy coding! Run 'python3 practice.py complete' when done.")
         
         # Auto-open disabled by default - uncomment next lines to enable
         # try:
@@ -471,6 +536,11 @@ testSolution();
         conn.close()
         
         print(f"✅ Completed: {problem[0]} ({problem[1]})")
+        
+        # Add to spaced repetition system if available
+        if SpacedRepetitionManager:
+            sr_manager = SpacedRepetitionManager(self.db_path)
+            sr_manager.add_problem_to_review(session[1], self.config["current_language"])
         
         # Auto-commit to git if enabled
         if self.config.get("auto_git", True):
@@ -602,6 +672,71 @@ testSolution();
             print(f"\n📄 Exporting detailed report...")
             report_file = visualizer.export_report(days, language)
             print(f"✅ Report saved to {report_file}")
+    
+    def get_recommendations(self, count=5, topic=None, language=None, daily=False):
+        """Get smart problem recommendations"""
+        if not RecommendationEngine:
+            print("❌ Recommendation engine not available. Please ensure recommendation_engine.py exists.")
+            return
+        
+        if not language:
+            language = self.config["current_language"]
+        
+        engine = RecommendationEngine(self.db_path)
+        
+        try:
+            if daily:
+                # Get daily challenge
+                recommendation = engine.get_daily_challenge(language)
+                if recommendation:
+                    print(f"\n🌟 Daily Challenge")
+                    print("=" * 50)
+                    self._display_recommendation(recommendation, 1)
+                else:
+                    print("❌ No daily challenge available. Try fetching more problems.")
+            
+            elif topic:
+                # Get topic-specific recommendations
+                recommendations = engine.get_topic_recommendations(topic, language, count)
+                if recommendations:
+                    print(f"\n🎯 {topic.title()} Recommendations")
+                    print("=" * 50)
+                    for i, rec in enumerate(recommendations, 1):
+                        self._display_recommendation(rec, i)
+                else:
+                    print(f"❌ No recommendations found for topic: {topic}")
+            
+            else:
+                # Get personalized recommendations
+                recommendations = engine.get_personalized_recommendations(language, count)
+                if recommendations:
+                    print(f"\n🎯 Personalized Recommendations ({language.title()})")
+                    print("=" * 50)
+                    for i, rec in enumerate(recommendations, 1):
+                        self._display_recommendation(rec, i)
+                else:
+                    print("❌ No recommendations available. Try solving a few problems first.")
+        
+        except Exception as e:
+            print(f"❌ Error generating recommendations: {e}")
+    
+    def _display_recommendation(self, rec, index):
+        """Display a single recommendation in a formatted way"""
+        difficulty_emoji = {"easy": "🟢", "medium": "🟡", "hard": "🔴"}
+        
+        print(f"\n{index}. {rec['title']}")
+        print(f"   {difficulty_emoji.get(rec['difficulty'], '⚪')} Difficulty: {rec['difficulty'].title()}")
+        print(f"   📚 Topic: {rec['topic'].title()}")
+        print(f"   🏆 Platform: {rec['platform'].title()}")
+        print(f"   📊 Score: {rec.get('recommendation_score', 0):.2f}/1.00")
+        
+        if 'recommendation_reasons' in rec and rec['recommendation_reasons']:
+            print(f"   💡 Why: {', '.join(rec['recommendation_reasons'])}")
+        
+        if rec.get('url'):
+            print(f"   🔗 URL: {rec['url']}")
+        
+        print()  # Empty line for spacing
     
     def list_problems(self, topic=None, difficulty=None, status=None, limit=20):
         """List problems with optional filters"""
@@ -921,7 +1056,7 @@ def main():
     start_parser.add_argument('--topic', help='Filter by topic')
     start_parser.add_argument('--difficulty', choices=['easy', 'medium', 'hard'], help='Filter by difficulty')
     start_parser.add_argument('--language', choices=['python', 'javascript', 'typescript', 'react'], help='Programming language')
-    start_parser.add_argument('--mode', choices=['sequential', 'random', 'topic'], default='sequential', help='Selection mode')
+    start_parser.add_argument('--mode', choices=['sequential', 'random', 'topic', 'smart'], default='sequential', help='Selection mode')
     
     # Complete command
     complete_parser = subparsers.add_parser('complete', help='Mark current problem as completed')
@@ -974,6 +1109,13 @@ def main():
     visualize_parser.add_argument('--charts', action='store_true', help='Generate visual charts (requires matplotlib)')
     visualize_parser.add_argument('--export', action='store_true', help='Export report to JSON')
     
+    # Recommend command
+    recommend_parser = subparsers.add_parser('recommend', help='Get smart problem recommendations')
+    recommend_parser.add_argument('--count', type=int, default=5, help='Number of recommendations')
+    recommend_parser.add_argument('--topic', help='Get recommendations for specific topic')
+    recommend_parser.add_argument('--language', default='python', help='Programming language')
+    recommend_parser.add_argument('--daily', action='store_true', help='Get daily challenge')
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -1004,6 +1146,8 @@ def main():
         manager.fetch_problems(args.source, args.limit, args.force)
     elif args.command == 'visualize':
         manager.visualize_progress(args.days, args.language, args.charts, args.export)
+    elif args.command == 'recommend':
+        manager.get_recommendations(args.count, args.topic, args.language, args.daily)
 
 if __name__ == "__main__":
     main() 
