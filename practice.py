@@ -70,6 +70,15 @@ class PracticeManager:
             )
         ''')
         
+        # Add performance indexes
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_problems_difficulty ON problems(difficulty)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_problems_topic ON problems(topic)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_problems_platform ON problems(platform)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_progress_status ON progress(status)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_progress_language ON progress(language)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_progress_completed_at ON progress(completed_at)')
+        cursor.execute('CREATE INDEX IF NOT EXISTS idx_progress_problem_language ON progress(problem_id, language)')
+        
         conn.commit()
         conn.close()
     
@@ -580,6 +589,238 @@ testSolution();
             for title, difficulty, completed_at in recent:
                 date = datetime.fromisoformat(completed_at).strftime("%Y-%m-%d")
                 print(f"  {title} ({difficulty}) - {date}")
+    
+    def list_problems(self, topic=None, difficulty=None, status=None, limit=20):
+        """List problems with optional filters"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Build query with filters
+        query = '''
+            SELECT p.id, p.title, p.difficulty, p.topic, p.platform,
+                   COALESCE(pr.status, 'pending') as status
+            FROM problems p
+            LEFT JOIN progress pr ON p.id = pr.problem_id AND pr.language = ?
+        '''
+        params = [self.config["current_language"]]
+        conditions = []
+        
+        if topic:
+            conditions.append("p.topic = ?")
+            params.append(topic)
+        
+        if difficulty:
+            conditions.append("p.difficulty = ?")
+            params.append(difficulty)
+        
+        if status:
+            if status == 'pending':
+                conditions.append("(pr.status IS NULL OR pr.status != 'completed')")
+            else:
+                conditions.append("pr.status = ?")
+                params.append(status)
+        
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+        
+        query += f" ORDER BY p.id LIMIT {limit}"
+        
+        cursor.execute(query, params)
+        problems = cursor.fetchall()
+        conn.close()
+        
+        if not problems:
+            print("No problems found matching your criteria.")
+            return
+        
+        print(f"\n📋 Problems List (showing {len(problems)} results)")
+        print("=" * 80)
+        print(f"{'ID':<4} {'Title':<30} {'Difficulty':<10} {'Topic':<15} {'Platform':<10} {'Status':<10}")
+        print("-" * 80)
+        
+        for problem in problems:
+            status_emoji = "✅" if problem[5] == "completed" else "🔄" if problem[5] == "in_progress" else "⏳"
+            print(f"{problem[0]:<4} {problem[1][:29]:<30} {problem[2]:<10} {problem[3]:<15} {problem[4]:<10} {status_emoji} {problem[5]:<10}")
+    
+    def reset_data(self, progress_only=False, reset_all=False, confirm=False):
+        """Reset progress or entire database"""
+        if not confirm:
+            if reset_all:
+                response = input("⚠️  This will delete ALL problems and progress. Are you sure? (yes/no): ")
+            elif progress_only:
+                response = input("⚠️  This will delete ALL progress data. Are you sure? (yes/no): ")
+            else:
+                print("Please specify --progress or --all flag")
+                return
+            
+            if response.lower() != 'yes':
+                print("Operation cancelled.")
+                return
+        
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        try:
+            if reset_all:
+                cursor.execute('DELETE FROM progress')
+                cursor.execute('DELETE FROM problems')
+                print("✅ All data reset successfully!")
+            elif progress_only:
+                cursor.execute('DELETE FROM progress')
+                print("✅ Progress data reset successfully!")
+            
+            conn.commit()
+        except Exception as e:
+            print(f"❌ Error resetting data: {e}")
+        finally:
+            conn.close()
+    
+    def export_data(self, format_type='json', output_file=None):
+        """Export problems and progress data"""
+        import csv
+        from datetime import datetime
+        
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Get all data
+        cursor.execute('''
+            SELECT p.*, pr.status, pr.completed_at, pr.time_spent, pr.notes
+            FROM problems p
+            LEFT JOIN progress pr ON p.id = pr.problem_id AND pr.language = ?
+        ''', (self.config["current_language"],))
+        
+        data = cursor.fetchall()
+        conn.close()
+        
+        if not output_file:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = f"practice_export_{timestamp}.{format_type}"
+        
+        try:
+            if format_type == 'json':
+                export_data = []
+                for row in data:
+                    export_data.append({
+                        'id': row[0], 'title': row[1], 'slug': row[2],
+                        'difficulty': row[3], 'topic': row[4], 'platform': row[5],
+                        'description': row[6], 'examples': row[7], 'constraints': row[8],
+                        'hints': row[9], 'url': row[10], 'tags': row[11],
+                        'status': row[13], 'completed_at': row[14], 'time_spent': row[15],
+                        'notes': row[16]
+                    })
+                
+                with open(output_file, 'w') as f:
+                    json.dump(export_data, f, indent=2)
+            
+            elif format_type == 'csv':
+                with open(output_file, 'w', newline='') as f:
+                    writer = csv.writer(f)
+                    headers = ['id', 'title', 'slug', 'difficulty', 'topic', 'platform',
+                              'description', 'examples', 'constraints', 'hints', 'url', 'tags',
+                              'status', 'completed_at', 'time_spent', 'notes']
+                    writer.writerow(headers)
+                    writer.writerows(data)
+            
+            print(f"✅ Data exported to {output_file}")
+        
+        except Exception as e:
+            print(f"❌ Error exporting data: {e}")
+    
+    def import_problems(self, file_path, format_type='json'):
+        """Import problems from file"""
+        import csv
+        
+        if not os.path.exists(file_path):
+            print(f"❌ File not found: {file_path}")
+            return
+        
+        try:
+            problems = []
+            
+            if format_type == 'json':
+                with open(file_path, 'r') as f:
+                    data = json.load(f)
+                    if isinstance(data, list):
+                        problems = data
+                    else:
+                        problems = [data]
+            
+            elif format_type == 'csv':
+                with open(file_path, 'r') as f:
+                    reader = csv.DictReader(f)
+                    problems = list(reader)
+            
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            imported_count = 0
+            for problem in problems:
+                try:
+                    cursor.execute('''
+                        INSERT OR IGNORE INTO problems 
+                        (title, slug, difficulty, topic, platform, description, examples, constraints, url, tags)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ''', (
+                        problem.get('title', ''), problem.get('slug', ''),
+                        problem.get('difficulty', ''), problem.get('topic', ''),
+                        problem.get('platform', ''), problem.get('description', ''),
+                        problem.get('examples', ''), problem.get('constraints', ''),
+                        problem.get('url', ''), problem.get('tags', '')
+                    ))
+                    if cursor.rowcount > 0:
+                        imported_count += 1
+                except Exception as e:
+                    print(f"⚠️  Skipped problem {problem.get('title', 'Unknown')}: {e}")
+            
+            conn.commit()
+            conn.close()
+            
+            print(f"✅ Successfully imported {imported_count} problems from {file_path}")
+        
+        except Exception as e:
+            print(f"❌ Error importing problems: {e}")
+    
+    def review_problems(self, days_ago=7):
+        """Show problems solved N days ago for review"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Calculate date range
+        review_date = datetime.now() - timedelta(days=days_ago)
+        start_date = review_date.strftime("%Y-%m-%d")
+        end_date = (review_date + timedelta(days=1)).strftime("%Y-%m-%d")
+        
+        cursor.execute('''
+            SELECT p.title, p.difficulty, p.topic, p.url, pr.completed_at, pr.notes
+            FROM progress pr
+            JOIN problems p ON pr.problem_id = p.id
+            WHERE pr.status = 'completed' 
+            AND pr.language = ?
+            AND DATE(pr.completed_at) >= ? 
+            AND DATE(pr.completed_at) < ?
+            ORDER BY pr.completed_at
+        ''', (self.config["current_language"], start_date, end_date))
+        
+        problems = cursor.fetchall()
+        conn.close()
+        
+        if not problems:
+            print(f"📚 No problems found from {days_ago} days ago to review.")
+            return
+        
+        print(f"\n📚 Review: Problems solved {days_ago} days ago")
+        print("=" * 60)
+        
+        for i, (title, difficulty, topic, url, completed_at, notes) in enumerate(problems, 1):
+            print(f"\n{i}. {title} ({difficulty})")
+            print(f"   Topic: {topic}")
+            print(f"   URL: {url}")
+            if notes:
+                print(f"   Notes: {notes}")
+            print(f"   Completed: {completed_at}")
+        
+        print(f"\n💡 Consider revisiting these {len(problems)} problems to reinforce your learning!")
 
 def main():
     parser = argparse.ArgumentParser(description="Automated Coding Practice CLI")
@@ -603,6 +844,33 @@ def main():
     # Setup command
     subparsers.add_parser('setup', help='Initial setup and populate problems')
     
+    # List command
+    list_parser = subparsers.add_parser('list', help='List problems with filters')
+    list_parser.add_argument('--topic', help='Filter by topic')
+    list_parser.add_argument('--difficulty', choices=['easy', 'medium', 'hard'], help='Filter by difficulty')
+    list_parser.add_argument('--status', choices=['completed', 'pending', 'in_progress'], help='Filter by status')
+    list_parser.add_argument('--limit', type=int, default=20, help='Limit number of results')
+    
+    # Reset command
+    reset_parser = subparsers.add_parser('reset', help='Reset progress or database')
+    reset_parser.add_argument('--progress', action='store_true', help='Reset only progress data')
+    reset_parser.add_argument('--all', action='store_true', help='Reset everything (problems + progress)')
+    reset_parser.add_argument('--confirm', action='store_true', help='Skip confirmation prompt')
+    
+    # Export command
+    export_parser = subparsers.add_parser('export', help='Export data')
+    export_parser.add_argument('--format', choices=['json', 'csv'], default='json', help='Export format')
+    export_parser.add_argument('--output', help='Output file path')
+    
+    # Import command
+    import_parser = subparsers.add_parser('import', help='Import problems from file')
+    import_parser.add_argument('file', help='Input file path')
+    import_parser.add_argument('--format', choices=['json', 'csv'], default='json', help='Import format')
+    
+    # Review command
+    review_parser = subparsers.add_parser('review', help='Review previously solved problems')
+    review_parser.add_argument('--days', type=int, default=7, help='Review problems from N days ago')
+    
     args = parser.parse_args()
     
     if not args.command:
@@ -619,6 +887,16 @@ def main():
         manager.complete_problem(args.notes, args.time)
     elif args.command == 'stats':
         manager.show_stats()
+    elif args.command == 'list':
+        manager.list_problems(args.topic, args.difficulty, args.status, args.limit)
+    elif args.command == 'reset':
+        manager.reset_data(args.progress, args.all, args.confirm)
+    elif args.command == 'export':
+        manager.export_data(args.format, args.output)
+    elif args.command == 'import':
+        manager.import_problems(args.file, args.format)
+    elif args.command == 'review':
+        manager.review_problems(args.days)
 
 if __name__ == "__main__":
     main() 
