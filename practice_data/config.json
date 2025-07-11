@@ -10,5 +10,36 @@
   "topic_preference": "sequential",
   "daily_goal": 3,
   "review_interval": 7,
-  "auto_git": true
+  "auto_git": true,
+  "performance": {
+    "enable_caching": true,
+    "cache_duration": 3600,
+    "connection_pool_size": 10,
+    "query_timeout": 30,
+    "batch_size": 100
+  },
+  "api": {
+    "rate_limit": 10,
+    "retry_attempts": 3,
+    "timeout": 30,
+    "backoff_factor": 2
+  },
+  "analytics": {
+    "enable_analytics": true,
+    "chart_generation": true,
+    "export_format": "json",
+    "retention_days": 365
+  },
+  "ui": {
+    "show_progress_bars": true,
+    "color_output": true,
+    "emoji_enabled": true,
+    "verbose_logging": false
+  },
+  "optimization": {
+    "lazy_loading": true,
+    "parallel_processing": true,
+    "memory_limit_mb": 512,
+    "gc_threshold": 1000
+  }
 }
