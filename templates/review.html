@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Review - Coding Practice System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h2 mb-0">
+            <i class="fas fa-redo me-2 text-primary"></i>
+            Spaced Repetition Review
+        </h1>
+        <p class="text-muted">Review previously solved problems to improve retention</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Due for Review</h5>
+                <span class="badge bg-warning">3 problems</span>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-calendar-check me-2"></i>
+                    You have problems due for review based on spaced repetition intervals.
+                    <br><br>
+                    <strong>Available via CLI:</strong> <code>python practice.py --review</code>
+                </div>
+                
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Two Sum</strong>
+                            <br><small class="text-muted">Last solved: 3 days ago • Due: Now</small>
+                        </div>
+                        <span class="badge bg-danger">Overdue</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Valid Parentheses</strong>
+                            <br><small class="text-muted">Last solved: 1 week ago • Due: Today</small>
+                        </div>
+                        <span class="badge bg-warning">Due</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Merge Two Lists</strong>
+                            <br><small class="text-muted">Last solved: 2 weeks ago • Due: Tomorrow</small>
+                        </div>
+                        <span class="badge bg-success">Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Review Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Retention Rate:</strong> <span class="text-success">89%</span>
+                    <div class="progress mt-1">
+                        <div class="progress-bar bg-success" style="width: 89%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <strong>Review Streak:</strong> <span class="text-info">7 days</span>
+                </div>
+                <div class="mb-3">
+                    <strong>Total Reviews:</strong> <span class="text-primary">142</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-warning w-100 mb-2" disabled>
+                    <i class="fas fa-play me-1"></i>Start Review Session
+                </button>
+                <a href="/" class="btn btn-primary w-100 mb-2">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                </a>
+                <button class="btn btn-info w-100" onclick="window.open('http://localhost:4500/api/spaced-repetition', '_blank')">
+                    <i class="fas fa-book me-1"></i>API Documentation
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

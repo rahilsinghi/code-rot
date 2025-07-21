@@ -225,6 +225,35 @@ def create_simple_flask_app():
             }
         })
     
+    # Additional page routes
+    @app.route('/practice')
+    def practice():
+        return render_template('practice.html')
+    
+    @app.route('/analytics')
+    def analytics():
+        return render_template('analytics.html')
+    
+    @app.route('/review')
+    def review():
+        return render_template('review.html')
+    
+    @app.route('/settings')
+    def settings():
+        return render_template('settings.html')
+    
+    @app.route('/study-sessions')
+    def study_sessions():
+        return render_template('study-sessions.html')
+    
+    @app.route('/notifications')
+    def notifications():
+        return render_template('settings.html')  # Redirect to settings for now
+    
+    @app.route('/about')
+    def about():
+        return render_template('settings.html')  # Redirect to settings for now
+    
     return app, socketio
 
 def open_browser(url):

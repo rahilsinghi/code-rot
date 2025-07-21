@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Coding Practice System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="h2 mb-0">
+            <i class="fas fa-cog me-2 text-primary"></i>
+            Settings
+        </h1>
+        <p class="text-muted">Configure your coding practice preferences</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Practice Preferences</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="language" class="form-label">Preferred Language</label>
+                        <select class="form-select" id="language">
+                            <option selected>Python</option>
+                            <option>JavaScript</option>
+                            <option>Java</option>
+                            <option>C++</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="difficulty" class="form-label">Default Difficulty</label>
+                        <select class="form-select" id="difficulty">
+                            <option>Easy</option>
+                            <option selected>Medium</option>
+                            <option>Hard</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="dailyGoal" class="form-label">Daily Goal</label>
+                        <input type="number" class="form-control" id="dailyGoal" value="3" min="1" max="10">
+                        <div class="form-text">Number of problems to solve per day</div>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="autoGit" checked>
+                        <label class="form-check-label" for="autoGit">
+                            Auto-commit to Git
+                        </label>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="notifications" checked>
+                        <label class="form-check-label" for="notifications">
+                            Enable notifications
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Study Session Settings</h5>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="focusMode" class="form-label">Default Focus Mode</label>
+                        <select class="form-select" id="focusMode">
+                            <option selected>Pomodoro (25 min)</option>
+                            <option>Deep Work (90 min)</option>
+                            <option>Sprint (15 min)</option>
+                            <option>Free Flow</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="breakReminders" checked>
+                        <label class="form-check-label" for="breakReminders">
+                            Break reminders
+                        </label>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="distractionBlock">
+                        <label class="form-check-label" for="distractionBlock">
+                            Block distracting apps during sessions
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">System Info</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <strong>Version:</strong> 2.0.0
+                </div>
+                <div class="mb-2">
+                    <strong>Database:</strong> SQLite
+                </div>
+                <div class="mb-2">
+                    <strong>API Status:</strong> 
+                    <span class="badge bg-success">Active</span>
+                </div>
+                <div class="mb-2">
+                    <strong>PWA:</strong> 
+                    <span class="badge bg-info">Enabled</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Actions</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-success w-100 mb-2" onclick="saveSettings()">
+                    <i class="fas fa-save me-1"></i>Save Settings
+                </button>
+                <button class="btn btn-warning w-100 mb-2" onclick="resetSettings()">
+                    <i class="fas fa-undo me-1"></i>Reset to Defaults
+                </button>
+                <a href="/" class="btn btn-primary w-100">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function saveSettings() {
+    // Mock save functionality
+    showNotification('Settings saved successfully!', 'success');
+}
+
+function resetSettings() {
+    if (confirm('Are you sure you want to reset all settings to defaults?')) {
+        // Reset form values
+        document.getElementById('language').value = 'Python';
+        document.getElementById('difficulty').value = 'Medium';
+        document.getElementById('dailyGoal').value = '3';
+        document.getElementById('autoGit').checked = true;
+        document.getElementById('notifications').checked = true;
+        document.getElementById('focusMode').value = 'Pomodoro (25 min)';
+        document.getElementById('breakReminders').checked = true;
+        document.getElementById('distractionBlock').checked = false;
+        
+        showNotification('Settings reset to defaults', 'info');
+    }
+}
+
+function showNotification(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white bg-${type} border-0`;
+    toast.style.position = 'fixed';
+    toast.style.top = '20px';
+    toast.style.right = '20px';
+    toast.style.zIndex = '9999';
+    
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.remove();
+        }
+    }, 3000);
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}Study Sessions - Coding Practice System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="h2 mb-0">
+                    <i class="fas fa-clock me-2 text-primary"></i>
+                    Study Sessions
+                </h1>
+                <p class="text-muted">Manage your focused practice sessions</p>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="startNewSession()">
+                <i class="fas fa-play me-1"></i>Start New Session
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Current Session</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="session-timer mb-3">
+                    <div class="fw-bold fs-3">No Active Session</div>
+                    <small class="text-muted">Start a session to begin tracking</small>
+                </div>
+                
+                <div class="session-controls">
+                    <button class="btn btn-success me-2" onclick="startNewSession()">
+                        <i class="fas fa-play"></i> Start
+                    </button>
+                    <button class="btn btn-warning me-2" disabled>
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button class="btn btn-danger" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Session Stats</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="h4 text-primary">12</div>
+                        <small class="text-muted">Total Sessions</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 text-success">8h 30m</div>
+                        <small class="text-muted">Total Time</small>
+                    </div>
+                    <div class="col-4">
+                        <div class="h4 text-info">42min</div>
+                        <small class="text-muted">Avg Session</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Recent Sessions</h5>
+                <select class="form-select form-select-sm w-auto">
+                    <option>Last 7 days</option>
+                    <option>Last 30 days</option>
+                    <option>All time</option>
+                </select>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Duration</th>
+                                <th>Focus Mode</th>
+                                <th>Problems</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Today, 2:30 PM</td>
+                                <td>25min</td>
+                                <td><span class="badge bg-primary">Pomodoro</span></td>
+                                <td>2/3</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>Yesterday, 11:00 AM</td>
+                                <td>90min</td>
+                                <td><span class="badge bg-info">Deep Work</span></td>
+                                <td>5/5</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>2 days ago, 3:15 PM</td>
+                                <td>15min</td>
+                                <td><span class="badge bg-warning">Sprint</span></td>
+                                <td>1/2</td>
+                                <td><span class="badge bg-danger">Interrupted</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Focus Modes</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <strong>Pomodoro</strong>
+                            <br><small class="text-muted">25 min work, 5 min break</small>
+                        </div>
+                        <span class="badge bg-primary">8</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <strong>Deep Work</strong>
+                            <br><small class="text-muted">90 min focused session</small>
+                        </div>
+                        <span class="badge bg-info">3</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <div>
+                            <strong>Sprint</strong>
+                            <br><small class="text-muted">15 min quick burst</small>
+                        </div>
+                        <span class="badge bg-warning">1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-success w-100 mb-2" onclick="quickStart('pomodoro')">
+                    <i class="fas fa-play me-1"></i>Quick Pomodoro
+                </button>
+                <button class="btn btn-info w-100 mb-2" onclick="quickStart('deep_work')">
+                    <i class="fas fa-brain me-1"></i>Deep Work Session
+                </button>
+                <a href="/" class="btn btn-primary w-100">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Session Modal -->
+<div class="modal fade" id="sessionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Start New Session</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="sessionForm">
+                    <div class="mb-3">
+                        <label for="sessionType" class="form-label">Session Type</label>
+                        <select class="form-select" id="sessionType">
+                            <option value="problem_solving">Problem Solving</option>
+                            <option value="review">Review</option>
+                            <option value="learning">Learning</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="focusMode" class="form-label">Focus Mode</label>
+                        <select class="form-select" id="focusMode">
+                            <option value="pomodoro">Pomodoro (25 min)</option>
+                            <option value="deep_work">Deep Work (90 min)</option>
+                            <option value="sprint">Sprint (15 min)</option>
+                            <option value="free_flow">Free Flow</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="goalProblems" class="form-label">Goal (Problems)</label>
+                        <input type="number" class="form-control" id="goalProblems" value="3" min="1" max="10">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createSession()">Start Session</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function startNewSession() {
+    const modal = new bootstrap.Modal(document.getElementById('sessionModal'));
+    modal.show();
+}
+
+function quickStart(mode) {
+    // Set form values and start session
+    document.getElementById('focusMode').value = mode;
+    startNewSession();
+}
+
+function createSession() {
+    // Mock session creation
+    const sessionData = {
+        type: document.getElementById('sessionType').value,
+        focus_mode: document.getElementById('focusMode').value,
+        goal_problems: parseInt(document.getElementById('goalProblems').value)
+    };
+    
+    // Close modal
+    bootstrap.Modal.getInstance(document.getElementById('sessionModal')).hide();
+    
+    // Show notification
+    showNotification('Session started! This is a demo - full functionality available via API.', 'info');
+    
+    // Update UI to show active session
+    updateSessionUI(sessionData);
+}
+
+function updateSessionUI(sessionData) {
+    const timerElement = document.querySelector('.session-timer');
+    timerElement.innerHTML = `
+        <div class="fw-bold fs-3 text-success">Session Active</div>
+        <small class="text-muted">${sessionData.focus_mode} mode - ${sessionData.goal_problems} problems</small>
+    `;
+    
+    // Enable/disable buttons
+    document.querySelector('.session-controls').innerHTML = `
+        <button class="btn btn-success me-2" disabled>
+            <i class="fas fa-play"></i> Start
+        </button>
+        <button class="btn btn-warning me-2">
+            <i class="fas fa-pause"></i> Pause
+        </button>
+        <button class="btn btn-danger" onclick="stopSession()">
+            <i class="fas fa-stop"></i> Stop
+        </button>
+    `;
+}
+
+function stopSession() {
+    if (confirm('Are you sure you want to stop the current session?')) {
+        // Reset UI
+        document.querySelector('.session-timer').innerHTML = `
+            <div class="fw-bold fs-3">No Active Session</div>
+            <small class="text-muted">Start a session to begin tracking</small>
+        `;
+        
+        document.querySelector('.session-controls').innerHTML = `
+            <button class="btn btn-success me-2" onclick="startNewSession()">
+                <i class="fas fa-play"></i> Start
+            </button>
+            <button class="btn btn-warning me-2" disabled>
+                <i class="fas fa-pause"></i> Pause
+            </button>
+            <button class="btn btn-danger" disabled>
+                <i class="fas fa-stop"></i> Stop
+            </button>
+        `;
+        
+        showNotification('Session stopped', 'warning');
+    }
+}
+
+function showNotification(message, type) {
+    const toast = document.createElement('div');
+    toast.className = `toast align-items-center text-white bg-${type} border-0`;
+    toast.style.position = 'fixed';
+    toast.style.top = '20px';
+    toast.style.right = '20px';
+    toast.style.zIndex = '9999';
+    
+    toast.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">${message}</div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.remove();
+        }
+    }, 5000);
+}
+</script>
+{% endblock %} 
