@@ -255,11 +255,11 @@ def main():
         print("🎉 Full system available!")
         app = dashboard.app
         socketio = dashboard.socketio
-        port = 5000
+        port = 4501
     else:
         print("⚠️  Using simplified dashboard for demo")
         app, socketio = create_simple_flask_app()
-        port = 5000
+        port = 4501
     
     # Setup PWA routes if available
     if pwa and hasattr(pwa, 'init_app'):

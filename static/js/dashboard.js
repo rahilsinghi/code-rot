@@ -414,7 +414,7 @@ function initializeNotifications() {
  */
 function refreshDashboardData() {
     // Refresh stats
-    fetch('/api/dashboard/stats')
+    fetch('http://localhost:4500/api/dashboard/stats')
         .then(response => response.json())
         .then(data => updateStatsCards(data))
         .catch(error => console.warn('Failed to refresh stats:', error));
@@ -422,7 +422,7 @@ function refreshDashboardData() {
     // Refresh activity
     const activityContainer = document.getElementById('recent-activity');
     if (activityContainer) {
-        fetch('/api/dashboard/activity?limit=10')
+        fetch('http://localhost:4500/api/dashboard/activity?limit=10')
             .then(response => response.json())
             .then(data => {
                 if (data.activities) {

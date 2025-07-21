@@ -269,7 +269,7 @@ function initializeDashboard() {
 }
 
 function createProgressChart() {
-    fetch('/api/dashboard/progress?days=7')
+    fetch('http://localhost:4500/api/dashboard/progress?days=7')
         .then(response => response.json())
         .then(data => {
             const trace = {
@@ -299,7 +299,7 @@ function createProgressChart() {
 }
 
 function createLanguageChart() {
-    fetch('/api/dashboard/languages')
+    fetch('http://localhost:4500/api/dashboard/languages')
         .then(response => response.json())
         .then(data => {
             const trace = {
@@ -328,7 +328,7 @@ function createLanguageChart() {
 }
 
 function loadRecentActivity() {
-    fetch('/api/dashboard/activity?limit=10')
+    fetch('http://localhost:4500/api/dashboard/activity?limit=10')
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('recent-activity');
@@ -359,7 +359,7 @@ function loadRecentActivity() {
 }
 
 function loadRecommendations() {
-    fetch('/api/recommendations?limit=5')
+    fetch('http://localhost:4500/api/recommendations?limit=5')
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('recommendations');
@@ -437,7 +437,7 @@ function createStudySession() {
         problems_planned: parseInt(document.getElementById('sessionGoals').value)
     };
     
-    fetch('/api/sessions/start', {
+    fetch('http://localhost:4500/api/sessions/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(sessionData)
@@ -467,7 +467,7 @@ function updateChart(period) {
     event.target.classList.add('active');
     
     // Reload chart with new period
-    fetch(`/api/dashboard/progress?days=${period.replace('d', '')}`)
+    fetch(`http://localhost:4500/api/dashboard/progress?days=${period.replace('d', '')}`)
         .then(response => response.json())
         .then(data => {
             Plotly.redraw('progress-chart');
