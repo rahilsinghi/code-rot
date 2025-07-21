@@ -1,0 +1,477 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Coding Practice System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h2 mb-0">
+                <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+                Dashboard
+            </h1>
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary" onclick="startSession()">
+                    <i class="fas fa-play me-1"></i>Start Session
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="refreshDashboard()">
+                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="small">Problems Solved</div>
+                        <div class="h4 mb-0" id="problems-solved">{{ stats.problems_solved or 0 }}</div>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="small">Success Rate</div>
+                        <div class="h4 mb-0" id="success-rate">{{ "%.1f"|format(stats.success_rate or 0) }}%</div>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-trophy fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="small">Current Streak</div>
+                        <div class="h4 mb-0" id="current-streak">{{ stats.current_streak or 0 }}</div>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-fire fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-3">
+        <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <div class="small">Study Time</div>
+                        <div class="h4 mb-0" id="study-time">{{ stats.total_hours or 0 }}h</div>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-clock fa-2x opacity-75"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row mb-4">
+    <div class="col-lg-8 mb-3">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-line me-2"></i>Progress Over Time
+                </h5>
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-outline-secondary active" onclick="updateChart('7d')">7D</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="updateChart('30d')">30D</button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="updateChart('90d')">90D</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="progress-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mb-3">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Language Distribution
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="language-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity & Recommendations -->
+<div class="row mb-4">
+    <div class="col-lg-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                <div id="recent-activity">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <div class="mt-2">Loading recent activity...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6 mb-3">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>AI Recommendations
+                </h5>
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="refreshRecommendations()">
+                    <i class="fas fa-sync-alt me-1"></i>Refresh
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="recommendations">
+                    <div class="text-center text-muted py-4">
+                        <i class="fas fa-brain fa-2x"></i>
+                        <div class="mt-2">Generating recommendations...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-rocket me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="/practice" class="btn btn-primary w-100 h-100 d-flex flex-column justify-content-center">
+                            <i class="fas fa-code fa-2x mb-2"></i>
+                            <div>Start Practice</div>
+                            <small class="opacity-75">Solve new problems</small>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="/review" class="btn btn-success w-100 h-100 d-flex flex-column justify-content-center">
+                            <i class="fas fa-redo fa-2x mb-2"></i>
+                            <div>Review Problems</div>
+                            <small class="opacity-75">Spaced repetition</small>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <a href="/analytics" class="btn btn-info w-100 h-100 d-flex flex-column justify-content-center">
+                            <i class="fas fa-chart-bar fa-2x mb-2"></i>
+                            <div>View Analytics</div>
+                            <small class="opacity-75">Detailed insights</small>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-3">
+                        <button type="button" class="btn btn-warning w-100 h-100 d-flex flex-column justify-content-center" onclick="startStudySession()">
+                            <i class="fas fa-clock fa-2x mb-2"></i>
+                            <div>Study Session</div>
+                            <small class="opacity-75">Pomodoro timer</small>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Study Session Modal -->
+<div class="modal fade" id="studySessionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Start Study Session</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="sessionForm">
+                    <div class="mb-3">
+                        <label for="sessionType" class="form-label">Session Type</label>
+                        <select class="form-select" id="sessionType">
+                            <option value="problem_solving">Problem Solving</option>
+                            <option value="review">Review</option>
+                            <option value="learning">Learning</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="focusMode" class="form-label">Focus Mode</label>
+                        <select class="form-select" id="focusMode">
+                            <option value="pomodoro">Pomodoro (25min)</option>
+                            <option value="deep_work">Deep Work (90min)</option>
+                            <option value="sprint">Sprint (15min)</option>
+                            <option value="free_flow">Free Flow</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sessionGoals" class="form-label">Goals</label>
+                        <input type="number" class="form-control" id="sessionGoals" placeholder="Number of problems to solve" min="1" max="10" value="3">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createStudySession()">Start Session</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Initialize dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+    loadRecentActivity();
+    loadRecommendations();
+    setupRealTimeUpdates();
+});
+
+function initializeDashboard() {
+    // Create initial charts
+    createProgressChart();
+    createLanguageChart();
+}
+
+function createProgressChart() {
+    fetch('/api/dashboard/progress?days=7')
+        .then(response => response.json())
+        .then(data => {
+            const trace = {
+                x: data.dates,
+                y: data.problems_solved,
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: 'Problems Solved',
+                line: { color: '#007bff', width: 3 },
+                marker: { size: 8 }
+            };
+            
+            const layout = {
+                margin: { t: 20, r: 20, b: 40, l: 40 },
+                xaxis: { title: 'Date' },
+                yaxis: { title: 'Problems Solved' },
+                showlegend: false
+            };
+            
+            Plotly.newPlot('progress-chart', [trace], layout, {responsive: true});
+        })
+        .catch(error => {
+            console.error('Error loading progress chart:', error);
+            document.getElementById('progress-chart').innerHTML = 
+                '<div class="text-center text-muted py-5">Error loading chart</div>';
+        });
+}
+
+function createLanguageChart() {
+    fetch('/api/dashboard/languages')
+        .then(response => response.json())
+        .then(data => {
+            const trace = {
+                labels: data.languages,
+                values: data.counts,
+                type: 'pie',
+                hole: 0.4,
+                marker: {
+                    colors: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6610f2']
+                }
+            };
+            
+            const layout = {
+                margin: { t: 20, r: 20, b: 20, l: 20 },
+                showlegend: true,
+                legend: { orientation: "v", x: 1.02, y: 0.5 }
+            };
+            
+            Plotly.newPlot('language-chart', [trace], layout, {responsive: true});
+        })
+        .catch(error => {
+            console.error('Error loading language chart:', error);
+            document.getElementById('language-chart').innerHTML = 
+                '<div class="text-center text-muted py-5">Error loading chart</div>';
+        });
+}
+
+function loadRecentActivity() {
+    fetch('/api/dashboard/activity?limit=10')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('recent-activity');
+            if (data.activities && data.activities.length > 0) {
+                container.innerHTML = data.activities.map(activity => `
+                    <div class="d-flex align-items-center mb-3 pb-2 border-bottom">
+                        <div class="flex-shrink-0 me-3">
+                            <i class="fas ${activity.icon} text-${activity.color}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">${activity.title}</div>
+                            <small class="text-muted">${activity.description}</small>
+                        </div>
+                        <div class="text-muted small">
+                            ${activity.time_ago}
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<div class="text-center text-muted py-4">No recent activity</div>';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading recent activity:', error);
+            document.getElementById('recent-activity').innerHTML = 
+                '<div class="text-center text-muted py-4">Error loading activity</div>';
+        });
+}
+
+function loadRecommendations() {
+    fetch('/api/recommendations?limit=5')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById('recommendations');
+            if (data.recommendations && data.recommendations.length > 0) {
+                container.innerHTML = data.recommendations.map(rec => `
+                    <div class="mb-3 p-3 bg-light rounded">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="fw-semibold">${rec.title}</div>
+                                <small class="text-muted">${rec.description}</small>
+                                <div class="mt-2">
+                                    <span class="badge bg-primary">${rec.language}</span>
+                                    <span class="badge bg-secondary">${rec.difficulty}</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary" onclick="practiceRecommendation(${rec.id})">
+                                Practice
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = '<div class="text-center text-muted py-4">No recommendations available</div>';
+            }
+        })
+        .catch(error => {
+            console.error('Error loading recommendations:', error);
+            document.getElementById('recommendations').innerHTML = 
+                '<div class="text-center text-muted py-4">Error loading recommendations</div>';
+        });
+}
+
+function setupRealTimeUpdates() {
+    if (typeof io !== 'undefined') {
+        const socket = io();
+        
+        socket.on('stats_update', function(data) {
+            updateStats(data);
+        });
+        
+        socket.on('new_activity', function(activity) {
+            prependActivity(activity);
+        });
+    }
+}
+
+function updateStats(stats) {
+    document.getElementById('problems-solved').textContent = stats.problems_solved || 0;
+    document.getElementById('success-rate').textContent = (stats.success_rate || 0).toFixed(1) + '%';
+    document.getElementById('current-streak').textContent = stats.current_streak || 0;
+    document.getElementById('study-time').textContent = (stats.total_hours || 0) + 'h';
+}
+
+function refreshDashboard() {
+    location.reload();
+}
+
+function refreshRecommendations() {
+    loadRecommendations();
+}
+
+function startSession() {
+    window.location.href = '/practice';
+}
+
+function startStudySession() {
+    const modal = new bootstrap.Modal(document.getElementById('studySessionModal'));
+    modal.show();
+}
+
+function createStudySession() {
+    const sessionData = {
+        type: document.getElementById('sessionType').value,
+        focus_mode: document.getElementById('focusMode').value,
+        problems_planned: parseInt(document.getElementById('sessionGoals').value)
+    };
+    
+    fetch('/api/sessions/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sessionData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('studySessionModal')).hide();
+            window.location.href = `/study-session/${data.session_id}`;
+        } else {
+            alert('Error starting session: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error starting session:', error);
+        alert('Error starting session');
+    });
+}
+
+function practiceRecommendation(problemId) {
+    window.location.href = `/practice?problem=${problemId}`;
+}
+
+function updateChart(period) {
+    // Update active button
+    document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Reload chart with new period
+    fetch(`/api/dashboard/progress?days=${period.replace('d', '')}`)
+        .then(response => response.json())
+        .then(data => {
+            Plotly.redraw('progress-chart');
+        });
+}
+</script>
+{% endblock %} 

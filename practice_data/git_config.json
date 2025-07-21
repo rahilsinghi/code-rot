@@ -1,0 +1,22 @@
+{
+  "auto_push": true,
+  "remote_name": "origin",
+  "main_branch": "main",
+  "commit_on_completion": true,
+  "commit_on_milestone": true,
+  "push_on_commit": true,
+  "create_tags": true,
+  "milestone_interval": 10,
+  "max_commits_per_hour": 20,
+  "safety_checks": true,
+  "backup_before_push": true,
+  "conflict_resolution": "auto",
+  "commit_templates": {
+    "problem_solved": "\u2705 Solved: {title} ({difficulty}) - {topic}",
+    "milestone": "\ud83c\udfc6 Milestone: {count} problems completed",
+    "review_completed": "\ud83d\udcda Reviewed: {title} ({performance}) - {topic}",
+    "session_complete": "\ud83c\udfaf Session complete: {count} problems in {time} minutes",
+    "topic_mastery": "\ud83c\udf93 Topic mastery: {topic} ({count} problems)",
+    "streak_milestone": "\ud83d\udd25 {days}-day streak milestone achieved"
+  }
+}

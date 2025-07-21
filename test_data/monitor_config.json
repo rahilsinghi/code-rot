@@ -1,0 +1,16 @@
+{
+  "monitoring_enabled": true,
+  "system_monitoring_interval": 60,
+  "database_monitoring": true,
+  "query_performance_tracking": true,
+  "alert_thresholds": {
+    "cpu_usage": 85,
+    "memory_usage": 90,
+    "disk_usage": 85,
+    "query_time_ms": 1000,
+    "database_size_mb": 500
+  },
+  "retention_days": 30,
+  "optimization_suggestions": true,
+  "performance_reports": true
+}

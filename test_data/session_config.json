@@ -1,0 +1,63 @@
+{
+  "pomodoro": {
+    "work_duration": 1500,
+    "short_break": 300,
+    "long_break": 900,
+    "sessions_before_long_break": 4
+  },
+  "deep_work": {
+    "work_duration": 5400,
+    "break_duration": 900
+  },
+  "sprint": {
+    "work_duration": 900,
+    "break_duration": 180
+  },
+  "audio": {
+    "enabled": true,
+    "work_start_sound": "bell.wav",
+    "break_start_sound": "chime.wav",
+    "session_end_sound": "complete.wav",
+    "volume": 0.7
+  },
+  "notifications": {
+    "desktop_enabled": true,
+    "sound_enabled": true,
+    "popup_duration": 5,
+    "reminder_interval": 600
+  },
+  "distraction_blocking": {
+    "enabled": false,
+    "blocked_websites": [
+      "youtube.com",
+      "facebook.com",
+      "twitter.com",
+      "instagram.com",
+      "tiktok.com",
+      "reddit.com"
+    ],
+    "blocked_apps": [
+      "Discord",
+      "Slack",
+      "WhatsApp",
+      "Telegram",
+      "Spotify",
+      "iTunes",
+      "VLC"
+    ],
+    "allowlist_mode": false,
+    "break_time_access": true
+  },
+  "goals": {
+    "daily_sessions": 4,
+    "daily_duration": 7200,
+    "weekly_sessions": 20,
+    "problems_per_session": 2
+  },
+  "analytics": {
+    "track_applications": true,
+    "track_keystrokes": false,
+    "track_mouse_activity": false,
+    "idle_threshold": 300
+  }
+}

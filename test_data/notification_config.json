@@ -1,0 +1,52 @@
+{
+  "email": {
+    "enabled": false,
+    "smtp_server": "smtp.gmail.com",
+    "smtp_port": 587,
+    "username": "",
+    "password": "",
+    "from_email": "coding-practice@example.com",
+    "from_name": "Coding Practice System"
+  },
+  "push": {
+    "enabled": false,
+    "vapid_public_key": "",
+    "vapid_private_key": "",
+    "vapid_email": ""
+  },
+  "webhook": {
+    "enabled": false,
+    "default_url": "",
+    "secret_key": ""
+  },
+  "reminders": {
+    "enabled": true,
+    "daily_reminder_time": "19:00",
+    "weekly_summary_day": "sunday",
+    "weekly_summary_time": "09:00",
+    "streak_reminder_threshold": 2
+  },
+  "achievements": {
+    "enabled": true,
+    "instant_notifications": true,
+    "summary_notifications": true
+  },
+  "templates": {
+    "achievement": {
+      "title": "\ud83c\udfc6 Achievement Unlocked!",
+      "body": "Congratulations! You earned: {achievement_name}"
+    },
+    "streak": {
+      "title": "\ud83d\udd25 Streak Alert!",
+      "body": "You have a {streak_days} day streak! Keep it up!"
+    },
+    "reminder": {
+      "title": "\ud83d\udcda Time to Practice",
+      "body": "You haven't practiced today. Ready to solve some problems?"
+    },
+    "milestone": {
+      "title": "\ud83c\udfaf Milestone Reached!",
+      "body": "You've completed {count} problems! Amazing progress!"
+    }
+  }
+}
