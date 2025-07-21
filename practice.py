@@ -39,6 +39,16 @@ except ImportError:
     print("⚠️  Spaced repetition module not found. Review features limited.")
     SpacedRepetitionManager = None
 
+try:
+    from git_automation import GitAutomation
+    from performance_monitor import PerformanceMonitor
+    ENHANCED_FEATURES = True
+except ImportError:
+    print("⚠️  Enhanced features not available. Git automation and performance monitoring limited.")
+    GitAutomation = None
+    PerformanceMonitor = None
+    ENHANCED_FEATURES = False
+
 class PracticeManager:
     def __init__(self):
         self.root_dir = Path.cwd()
@@ -48,6 +58,18 @@ class PracticeManager:
         self.ensure_directories()
         self.init_database()
         self.load_config()
+        
+        # Initialize enhanced features
+        self.git_automation = None
+        self.performance_monitor = None
+        
+        if ENHANCED_FEATURES:
+            try:
+                self.git_automation = GitAutomation(self.root_dir)
+                self.performance_monitor = PerformanceMonitor(self.db_path)
+                print("✅ Enhanced features initialized: Git automation and performance monitoring")
+            except Exception as e:
+                print(f"⚠️  Error initializing enhanced features: {e}")
     
     def ensure_directories(self):
         """Create necessary directories"""
@@ -544,7 +566,19 @@ testSolution();
         
         # Auto-commit to git if enabled
         if self.config.get("auto_git", True):
-            self.git_commit(problem[0], problem[1], problem[2])
+            if self.git_automation:
+                # Use enhanced git automation
+                self.git_automation.commit_problem_solution(
+                    problem[0], problem[1], problem[2], 
+                    additional_info={
+                        'time_spent': time_spent,
+                        'language': self.config["current_language"],
+                        'notes': notes
+                    }
+                )
+            else:
+                # Fallback to basic git automation
+                self.git_commit(problem[0], problem[1], problem[2])
         
         # Update progress files
         self.update_progress_files()
@@ -1180,13 +1214,18 @@ testSolution();
             
             # Auto-commit if enabled
             if self.config.get("auto_git", True):
-                try:
-                    subprocess.run(["git", "add", "."], check=True)
-                    commit_message = f"📚 Reviewed: {problem[0]} ({performance}) - {problem[2]}"
-                    subprocess.run(["git", "commit", "-m", commit_message], check=True)
-                    print("📝 Review committed to git")
-                except subprocess.CalledProcessError:
-                    pass  # Ignore git errors
+                if self.git_automation:
+                    # Use enhanced git automation
+                    self.git_automation.commit_review_session(problem[0], performance, problem[2])
+                else:
+                    # Fallback to basic git automation
+                    try:
+                        subprocess.run(["git", "add", "."], check=True)
+                        commit_message = f"📚 Reviewed: {problem[0]} ({performance}) - {problem[2]}"
+                        subprocess.run(["git", "commit", "-m", commit_message], check=True)
+                        print("📝 Review committed to git")
+                    except subprocess.CalledProcessError:
+                        pass  # Ignore git errors
         
         except ValueError as e:
             print(f"❌ Error: {e}")
