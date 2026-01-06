@@ -12,6 +12,7 @@
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/themes.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/progress-indicators.css') }}" rel="stylesheet">
     
     <!-- Theme Toggle Script (load early to prevent flash) -->
     <script>
@@ -129,6 +130,9 @@
     
     <!-- Plotly -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <!-- Chart Manager -->
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
     
     <!-- Theme Toggle -->
     <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
