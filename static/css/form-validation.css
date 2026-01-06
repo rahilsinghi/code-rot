@@ -1,0 +1,347 @@
+/**
+ * Form Validation Styles
+ * Visual feedback for form validation
+ */
+
+/* Form Group */
+.form-group {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+/* Input States */
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: var(--accent-success);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--accent-danger);
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+    animation: shake 0.4s ease;
+}
+
+.form-control.is-valid:focus,
+.form-select.is-valid:focus {
+    border-color: var(--accent-success);
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+    border-color: var(--accent-danger);
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* Feedback Messages */
+.valid-feedback,
+.invalid-feedback {
+    display: none;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.valid-feedback {
+    color: var(--accent-success);
+}
+
+.invalid-feedback {
+    color: var(--accent-danger);
+}
+
+.was-validated .form-control.is-valid ~ .valid-feedback,
+.was-validated .form-select.is-valid ~ .valid-feedback,
+.is-valid .valid-feedback {
+    display: block;
+    animation: fadeInUp 0.2s ease;
+}
+
+.was-validated .form-control.is-invalid ~ .invalid-feedback,
+.was-validated .form-select.is-invalid ~ .invalid-feedback,
+.is-invalid .invalid-feedback {
+    display: block;
+    animation: fadeInUp 0.2s ease;
+}
+
+/* Label Animation */
+.form-floating .form-label {
+    transition: all 0.2s ease;
+}
+
+.form-floating .form-control:focus ~ .form-label,
+.form-floating .form-control:not(:placeholder-shown) ~ .form-label {
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+    color: var(--accent-primary);
+}
+
+/* Password Strength Meter */
+.password-strength {
+    margin-top: 0.5rem;
+}
+
+.strength-bar {
+    height: 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 2px;
+}
+
+.strength-fill.weak {
+    background: var(--accent-danger);
+}
+
+.strength-fill.fair {
+    background: var(--accent-warning);
+}
+
+.strength-fill.good {
+    background: var(--accent-info);
+}
+
+.strength-fill.strong {
+    background: var(--accent-success);
+}
+
+.strength-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.strength-text.weak {
+    color: var(--accent-danger);
+}
+
+.strength-text.fair {
+    color: var(--accent-warning);
+}
+
+.strength-text.good {
+    color: var(--accent-info);
+}
+
+.strength-text.strong {
+    color: var(--accent-success);
+}
+
+/* Character Counter */
+.char-counter {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: 0.25rem;
+    transition: color 0.2s ease;
+}
+
+.char-counter.warning {
+    color: var(--accent-warning);
+}
+
+.char-counter.error {
+    color: var(--accent-danger);
+}
+
+/* Input Group Validation */
+.input-group .form-control.is-valid,
+.input-group .form-control.is-invalid {
+    z-index: 1;
+}
+
+.input-group .form-control.is-valid:focus,
+.input-group .form-control.is-invalid:focus {
+    z-index: 3;
+}
+
+/* Checkbox and Radio Validation */
+.form-check-input.is-valid {
+    border-color: var(--accent-success);
+}
+
+.form-check-input.is-valid:checked {
+    background-color: var(--accent-success);
+    border-color: var(--accent-success);
+}
+
+.form-check-input.is-valid ~ .form-check-label {
+    color: var(--accent-success);
+}
+
+.form-check-input.is-invalid {
+    border-color: var(--accent-danger);
+}
+
+.form-check-input.is-invalid:checked {
+    background-color: var(--accent-danger);
+    border-color: var(--accent-danger);
+}
+
+.form-check-input.is-invalid ~ .form-check-label {
+    color: var(--accent-danger);
+}
+
+/* Required Field Indicator */
+.form-label.required::after {
+    content: ' *';
+    color: var(--accent-danger);
+}
+
+/* Tooltip-style validation messages */
+.validation-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 5;
+    display: none;
+    max-width: 100%;
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #fff;
+    background-color: var(--accent-danger);
+    border-radius: 0.375rem;
+}
+
+.validation-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 1rem;
+    border-width: 0 6px 6px;
+    border-style: solid;
+    border-color: transparent transparent var(--accent-danger);
+}
+
+.is-invalid ~ .validation-tooltip {
+    display: block;
+    animation: fadeInUp 0.2s ease;
+}
+
+/* Inline validation messages */
+.inline-validation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.inline-validation i {
+    font-size: 0.75rem;
+}
+
+.inline-validation.valid {
+    color: var(--accent-success);
+}
+
+.inline-validation.invalid {
+    color: var(--accent-danger);
+}
+
+/* Input with icon */
+.input-icon-wrapper {
+    position: relative;
+}
+
+.input-icon-wrapper .input-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.input-icon-wrapper .form-control {
+    padding-left: 2.5rem;
+}
+
+.input-icon-wrapper .form-control:focus ~ .input-icon {
+    color: var(--accent-primary);
+}
+
+.input-icon-wrapper .form-control.is-valid ~ .input-icon {
+    color: var(--accent-success);
+}
+
+.input-icon-wrapper .form-control.is-invalid ~ .input-icon {
+    color: var(--accent-danger);
+}
+
+/* Password toggle button */
+.password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: var(--text-primary);
+}
+
+.input-icon-wrapper .password-toggle {
+    right: 2.5rem;
+}
+
+/* Form row with validation */
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row > .form-group {
+    flex: 1;
+}
+
+/* Shake Animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .form-control.is-valid {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2351cf66' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}
+
+[data-theme="dark"] .form-control.is-invalid {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23ff6b6b'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23ff6b6b' stroke='none'/%3e%3c/svg%3e");
+}
+
