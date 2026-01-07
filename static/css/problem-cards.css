@@ -1,0 +1,394 @@
+/**
+ * Problem Card Component Styles
+ * Beautiful cards for displaying coding problems
+ */
+
+/* Base Problem Card */
+.problem-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.problem-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-primary);
+}
+
+/* Difficulty stripe */
+.problem-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--difficulty-color, var(--border-color));
+}
+
+.problem-card.easy { --difficulty-color: var(--accent-success); }
+.problem-card.medium { --difficulty-color: var(--accent-warning); }
+.problem-card.hard { --difficulty-color: var(--accent-danger); }
+
+/* Card Header */
+.problem-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+}
+
+.problem-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.problem-card-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.problem-card-title a:hover {
+    color: var(--accent-primary);
+}
+
+.problem-card-number {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Difficulty Badge */
+.difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.difficulty-badge.easy {
+    background: rgba(81, 207, 102, 0.15);
+    color: var(--accent-success);
+}
+
+.difficulty-badge.medium {
+    background: rgba(255, 212, 59, 0.15);
+    color: #b38600;
+}
+
+[data-theme="dark"] .difficulty-badge.medium,
+[data-theme="ocean"] .difficulty-badge.medium,
+[data-theme="forest"] .difficulty-badge.medium,
+[data-theme="sunset"] .difficulty-badge.medium,
+[data-theme="midnight"] .difficulty-badge.medium {
+    color: var(--accent-warning);
+}
+
+.difficulty-badge.hard {
+    background: rgba(255, 107, 107, 0.15);
+    color: var(--accent-danger);
+}
+
+/* Tags */
+.problem-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.problem-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.problem-tag:hover {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.problem-tag i {
+    margin-right: 0.375rem;
+    font-size: 0.625rem;
+}
+
+/* Description */
+.problem-card-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Stats Row */
+.problem-card-stats {
+    display: flex;
+    gap: 1.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.problem-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+.problem-stat i {
+    font-size: 0.875rem;
+}
+
+.problem-stat.acceptance {
+    color: var(--accent-success);
+}
+
+/* Actions */
+.problem-card-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.problem-action-btn {
+    flex: 1;
+    padding: 0.625rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.problem-action-btn.primary {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.problem-action-btn.primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.problem-action-btn.secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.problem-action-btn.secondary:hover {
+    background: var(--border-color);
+}
+
+/* Status Indicators */
+.problem-card.solved {
+    border-color: var(--accent-success);
+}
+
+.problem-card.solved::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 24px;
+    height: 24px;
+    background: var(--accent-success);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+.problem-card.attempted {
+    border-color: var(--accent-warning);
+}
+
+.problem-card.attempted::after {
+    content: '\f017';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 400;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 24px;
+    height: 24px;
+    background: var(--accent-warning);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+.problem-card.review {
+    border-color: var(--accent-info);
+}
+
+.problem-card.review::after {
+    content: '\f01e';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 24px;
+    height: 24px;
+    background: var(--accent-info);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+}
+
+/* Problem List */
+.problem-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Problem Grid */
+.problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+}
+
+/* Compact Card Variant */
+.problem-card.compact {
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.problem-card.compact::before {
+    width: 3px;
+    border-radius: 0 4px 4px 0;
+}
+
+.problem-card.compact .problem-card-header {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.problem-card.compact .problem-card-title {
+    font-size: 1rem;
+}
+
+.problem-card.compact .problem-card-tags,
+.problem-card.compact .problem-card-description,
+.problem-card.compact .problem-card-stats {
+    display: none;
+}
+
+.problem-card.compact .problem-card-actions {
+    margin-top: 0;
+    flex: 0 0 auto;
+}
+
+/* Featured Card */
+.problem-card.featured {
+    background: var(--gradient-primary);
+    border: none;
+    color: white;
+}
+
+.problem-card.featured::before {
+    display: none;
+}
+
+.problem-card.featured .problem-card-title,
+.problem-card.featured .problem-card-description,
+.problem-card.featured .problem-stat,
+.problem-card.featured .problem-tag {
+    color: white;
+}
+
+.problem-card.featured .problem-tag {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.problem-card.featured .difficulty-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Loading State */
+.problem-card.loading {
+    pointer-events: none;
+}
+
+.problem-card.loading .problem-card-title,
+.problem-card.loading .problem-card-description,
+.problem-card.loading .problem-tag {
+    background: var(--skeleton-base);
+    color: transparent;
+    border-radius: 4px;
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Hover Effects */
+.problem-card-hover-grow:hover {
+    transform: scale(1.02);
+}
+
+.problem-card-hover-glow:hover {
+    box-shadow: 0 0 20px rgba(var(--accent-primary), 0.2);
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .problem-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .problem-card-stats {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .problem-card-actions {
+        flex-direction: column;
+    }
+}
+
