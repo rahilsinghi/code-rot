@@ -1,0 +1,402 @@
+/**
+ * Accessibility Enhancements
+ * WCAG 2.1 AA compliant styles
+ */
+
+/* Skip to content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--accent-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    z-index: 10003;
+    border-radius: 0 0 8px 0;
+    text-decoration: none;
+    font-weight: 500;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--accent-warning);
+    outline-offset: 2px;
+}
+
+/* Focus styles */
+:focus {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+/* Enhanced focus for buttons */
+button:focus-visible,
+.btn:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--accent-primary);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(var(--accent-primary), 0.15);
+}
+
+/* Focus within for form groups */
+.form-group:focus-within {
+    background: rgba(var(--accent-primary), 0.02);
+    border-radius: 8px;
+}
+
+/* High contrast focus */
+@media (prefers-contrast: high) {
+    :focus-visible {
+        outline: 3px solid currentColor;
+        outline-offset: 3px;
+    }
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* Visible labels for form elements */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Required field indicator */
+.required::after {
+    content: ' *';
+    color: var(--accent-danger);
+}
+
+/* Form validation states */
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--accent-danger);
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23dc3545'%3E%3Cpath d='M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 10.5l-1 1L8 9l-2.5 2.5-1-1L7 8 4.5 5.5l1-1L8 7l2.5-2.5 1 1L9 8l2.5 2.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+}
+
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: var(--accent-success);
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23198754'%3E%3Cpath d='M13.485 1.929a.5.5 0 0 1 .057.638l-.057.07-7.5 7.5a.5.5 0 0 1-.638.057l-.07-.057-3.5-3.5a.5.5 0 0 1 .638-.765l.07.057L5.5 8.793l7.146-7.147a.5.5 0 0 1 .765.057l.074.126z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+}
+
+/* Error messages */
+.invalid-feedback,
+.valid-feedback {
+    display: none;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.invalid-feedback {
+    color: var(--accent-danger);
+}
+
+.valid-feedback {
+    color: var(--accent-success);
+}
+
+.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.is-valid ~ .valid-feedback {
+    display: block;
+}
+
+/* Error announcements */
+[role="alert"] {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+[role="alert"][aria-live="polite"] {
+    background: rgba(var(--accent-info), 0.1);
+    border-left: 4px solid var(--accent-info);
+}
+
+[role="alert"][aria-live="assertive"] {
+    background: rgba(var(--accent-danger), 0.1);
+    border-left: 4px solid var(--accent-danger);
+}
+
+/* Touch targets - minimum 44x44px */
+button,
+.btn,
+input[type="checkbox"],
+input[type="radio"],
+select,
+a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 20px;
+    height: 20px;
+}
+
+/* Larger click/tap areas */
+.touch-target {
+    position: relative;
+}
+
+.touch-target::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px;
+    height: 44px;
+}
+
+/* Text spacing for readability */
+p, li, td, th {
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+}
+
+/* Minimum text size */
+body {
+    font-size: 1rem;
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+}
+
+/* Link distinction */
+a {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+a:hover {
+    text-decoration-thickness: 2px;
+}
+
+/* Remove underlines from button-styled links */
+.btn,
+.nav-link,
+a[role="button"] {
+    text-decoration: none;
+}
+
+/* Color contrast helpers */
+.text-high-contrast {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+}
+
+/* Disabled states */
+[disabled],
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Indicate current page in navigation */
+.nav-link[aria-current="page"],
+.breadcrumb-item.active {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Progress indicators */
+[role="progressbar"] {
+    position: relative;
+}
+
+[role="progressbar"]::after {
+    content: attr(aria-valuenow) '%';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Loading states */
+[aria-busy="true"] {
+    cursor: wait;
+    position: relative;
+}
+
+[aria-busy="true"]::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--accent-primary);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Expanded/collapsed states */
+[aria-expanded="false"] .expand-icon::before {
+    content: '+';
+}
+
+[aria-expanded="true"] .expand-icon::before {
+    content: '−';
+}
+
+/* Selected states */
+[aria-selected="true"] {
+    background-color: rgba(var(--accent-primary), 0.1);
+    border-color: var(--accent-primary);
+}
+
+/* Keyboard navigation indicators */
+.keyboard-nav-active *:focus {
+    outline: 3px solid var(--accent-primary) !important;
+    outline-offset: 4px !important;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --text-primary: #000;
+        --text-secondary: #333;
+        --bg-primary: #fff;
+        --border-color: #000;
+    }
+    
+    [data-theme="dark"] {
+        --text-primary: #fff;
+        --text-secondary: #ccc;
+        --bg-primary: #000;
+        --border-color: #fff;
+    }
+    
+    button,
+    .btn,
+    input,
+    select,
+    textarea {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .no-motion {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+    
+    a[href]::after {
+        content: ' (' attr(href) ')';
+        font-size: 0.875em;
+    }
+}
+
+/* Visible focus mode toggle */
+.focus-mode-btn {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+}
+
+.focus-mode-btn:hover {
+    background: var(--bg-card-hover);
+}
+
+/* Screen magnification friendly */
+@media (min-resolution: 192dpi) {
+    body {
+        font-size: 1.125rem;
+    }
+    
+    button,
+    .btn {
+        min-height: 48px;
+    }
+}
+
