@@ -1,0 +1,378 @@
+/**
+ * Achievement Badges System
+ * Gamification visual components
+ */
+
+/* Achievement Badge Base */
+.achievement-badge {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.achievement-badge:hover {
+    transform: scale(1.05);
+}
+
+/* Badge Icon Container */
+.badge-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    position: relative;
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+/* Badge Tiers */
+.badge-bronze .badge-icon {
+    background: linear-gradient(145deg, #cd7f32, #a0522d);
+    box-shadow: 0 4px 15px rgba(205, 127, 50, 0.4);
+    color: #fff;
+}
+
+.badge-silver .badge-icon {
+    background: linear-gradient(145deg, #c0c0c0, #a8a8a8);
+    box-shadow: 0 4px 15px rgba(192, 192, 192, 0.4);
+    color: #fff;
+}
+
+.badge-gold .badge-icon {
+    background: linear-gradient(145deg, #ffd700, #daa520);
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+    color: #fff;
+}
+
+.badge-platinum .badge-icon {
+    background: linear-gradient(145deg, #e5e4e2, #b4b4b4);
+    box-shadow: 0 4px 15px rgba(229, 228, 226, 0.6);
+    color: #333;
+}
+
+.badge-diamond .badge-icon {
+    background: linear-gradient(145deg, #b9f2ff, #00bfff);
+    box-shadow: 0 4px 20px rgba(0, 191, 255, 0.5);
+    color: #fff;
+}
+
+/* Locked Badge */
+.badge-locked .badge-icon {
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    opacity: 0.5;
+    filter: grayscale(100%);
+}
+
+.badge-locked::after {
+    content: '\f023';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+/* Badge Title & Description */
+.badge-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.badge-description {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    max-width: 120px;
+}
+
+/* Badge Progress */
+.badge-progress {
+    width: 100%;
+    max-width: 100px;
+    height: 4px;
+    background: var(--bg-tertiary);
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.badge-progress-fill {
+    height: 100%;
+    background: var(--accent-primary);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+/* Shine Effect for Earned Badges */
+.badge-earned .badge-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 60%
+    );
+    animation: badge-shine 3s infinite;
+}
+
+@keyframes badge-shine {
+    0% { transform: rotate(0deg) translateX(-100%); }
+    100% { transform: rotate(0deg) translateX(100%); }
+}
+
+/* New Badge Animation */
+.badge-new {
+    animation: badge-bounce 0.6s ease;
+}
+
+@keyframes badge-bounce {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Badge Ring (outline) */
+.badge-icon::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.badge-gold .badge-icon::after {
+    border-color: rgba(255, 215, 0, 0.3);
+}
+
+.badge-diamond .badge-icon::after {
+    border-color: rgba(0, 191, 255, 0.3);
+}
+
+/* Achievement List */
+.achievement-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+/* Achievement Card */
+.achievement-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+.achievement-card.earned {
+    border-color: var(--accent-success);
+    background: linear-gradient(180deg, var(--bg-card) 0%, rgba(25, 135, 84, 0.05) 100%);
+}
+
+/* Streak Badges */
+.streak-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 100%);
+    border-radius: 20px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.streak-badge i {
+    font-size: 1rem;
+}
+
+.streak-badge.streak-7 {
+    background: linear-gradient(135deg, #4dabf7 0%, #4facfe 100%);
+}
+
+.streak-badge.streak-30 {
+    background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+}
+
+.streak-badge.streak-100 {
+    background: linear-gradient(135deg, #b9f2ff 0%, #00bfff 100%);
+}
+
+/* Level Badge */
+.level-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    background: var(--gradient-primary);
+    border-radius: 16px;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.level-badge-icon {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+}
+
+/* XP Bar */
+.xp-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.xp-level {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.xp-info {
+    flex: 1;
+}
+
+.xp-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+}
+
+.xp-progress {
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.xp-progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.xp-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+}
+
+/* Category Badges */
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.category-badge.arrays { background: rgba(77, 171, 247, 0.15); color: #4dabf7; }
+.category-badge.strings { background: rgba(81, 207, 102, 0.15); color: #51cf66; }
+.category-badge.trees { background: rgba(255, 146, 43, 0.15); color: #ff922b; }
+.category-badge.graphs { background: rgba(177, 151, 252, 0.15); color: #b197fc; }
+.category-badge.dp { background: rgba(255, 107, 107, 0.15); color: #ff6b6b; }
+.category-badge.sorting { background: rgba(255, 212, 59, 0.15); color: #ffd43b; }
+
+/* Achievement Toast */
+.achievement-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border-left: 4px solid var(--accent-success);
+    z-index: 10001;
+    animation: achievement-slide-in 0.5s ease;
+}
+
+@keyframes achievement-slide-in {
+    0% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.achievement-toast-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.achievement-toast-content h4 {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.achievement-toast-content p {
+    margin: 0.25rem 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
