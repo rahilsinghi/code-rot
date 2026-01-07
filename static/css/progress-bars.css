@@ -1,0 +1,376 @@
+/**
+ * Enhanced Progress Bars
+ * Animated, gradient progress indicators
+ */
+
+/* Base Progress Bar */
+.progress-enhanced {
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-enhanced .progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradient Progress Bars */
+.progress-bar-gradient-primary {
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-purple));
+}
+
+.progress-bar-gradient-success {
+    background: linear-gradient(90deg, #11998e, #38ef7d);
+}
+
+.progress-bar-gradient-warning {
+    background: linear-gradient(90deg, #f093fb, #f5576c);
+}
+
+.progress-bar-gradient-info {
+    background: linear-gradient(90deg, #4facfe, #00f2fe);
+}
+
+.progress-bar-gradient-danger {
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+}
+
+/* Animated Shine Effect */
+.progress-bar-shine .progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    animation: progress-shine 2s infinite;
+}
+
+@keyframes progress-shine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Striped Progress Bar */
+.progress-bar-striped .progress-bar {
+    background-image: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.15) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 1rem 1rem;
+}
+
+.progress-bar-striped.animated .progress-bar {
+    animation: progress-stripes 1s linear infinite;
+}
+
+@keyframes progress-stripes {
+    0% { background-position: 1rem 0; }
+    100% { background-position: 0 0; }
+}
+
+/* Circular Progress */
+.progress-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.progress-circle svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.progress-circle-bg {
+    fill: none;
+    stroke: var(--bg-tertiary);
+    stroke-width: 8;
+}
+
+.progress-circle-fill {
+    fill: none;
+    stroke: var(--accent-primary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-dasharray: 326.73;
+    stroke-dashoffset: 326.73;
+    transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.progress-circle-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+}
+
+/* Mini Progress */
+.progress-mini {
+    height: 4px;
+    border-radius: 2px;
+}
+
+/* Large Progress */
+.progress-lg {
+    height: 16px;
+    border-radius: 8px;
+}
+
+.progress-lg .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* Progress with Label */
+.progress-labeled {
+    position: relative;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.progress-label-name {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.progress-label-value {
+    color: var(--text-secondary);
+}
+
+/* Multi-segment Progress */
+.progress-multi {
+    display: flex;
+    height: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--bg-tertiary);
+}
+
+.progress-multi .segment {
+    transition: width 0.6s ease;
+}
+
+.progress-multi .segment:first-child {
+    border-radius: 10px 0 0 10px;
+}
+
+.progress-multi .segment:last-child {
+    border-radius: 0 10px 10px 0;
+}
+
+/* Skill Bar */
+.skill-bar {
+    margin-bottom: 1.5rem;
+}
+
+.skill-bar .skill-name {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.skill-bar .skill-title {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.skill-bar .skill-percent {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+/* Progress Steps */
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--bg-tertiary);
+    z-index: 0;
+}
+
+.progress-steps-fill {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    height: 4px;
+    background: var(--accent-primary);
+    z-index: 1;
+    transition: width 0.5s ease;
+}
+
+.progress-step {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.progress-step-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--bg-tertiary);
+    border: 3px solid var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .progress-step-icon {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.progress-step.completed .progress-step-icon {
+    background: var(--accent-success);
+    color: white;
+}
+
+.progress-step-label {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.progress-step.active .progress-step-label {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Pulsing Progress */
+.progress-pulse .progress-bar::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { 
+        transform: translateY(-50%) scale(1);
+        opacity: 1;
+    }
+    50% { 
+        transform: translateY(-50%) scale(1.5);
+        opacity: 0.5;
+    }
+}
+
+/* Wave Animation */
+.progress-wave .progress-bar {
+    position: relative;
+}
+
+.progress-wave .progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        transparent 100%
+    );
+    animation: wave 1.5s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Daily Goal Progress */
+.daily-goal-progress {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.daily-goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.daily-goal-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.daily-goal-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.daily-goal-count span {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
