@@ -19,6 +19,11 @@
     <link href="{{ url_for('static', filename='css/skeletons.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/keyboard-shortcuts.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/search.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/progress-bars.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/achievements.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/transitions.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/problem-cards.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/accessibility.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/mobile.css') }}" rel="stylesheet">
     
     <!-- Theme Toggle Script (load early to prevent flash) -->
@@ -38,7 +43,10 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icons/favicon.ico') }}">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
 </head>
-<body>
+<body class="stagger-children">
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--gradient-primary);">
         <div class="container">
@@ -96,7 +104,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="container mt-4">
+    <main id="main-content" class="container mt-4" role="main">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -203,6 +211,33 @@
     
     <!-- Data Manager -->
     <script src="{{ url_for('static', filename='js/data-manager.js') }}"></script>
+    
+    <!-- Confetti Effects -->
+    <script src="{{ url_for('static', filename='js/confetti.js') }}"></script>
+    
+    <!-- Streak Counter -->
+    <script src="{{ url_for('static', filename='js/streak-counter.js') }}"></script>
+    
+    <!-- Difficulty Selector -->
+    <script src="{{ url_for('static', filename='js/difficulty-selector.js') }}"></script>
+    
+    <!-- Chart Themes -->
+    <script src="{{ url_for('static', filename='js/chart-themes.js') }}"></script>
+    
+    <!-- Onboarding -->
+    <script src="{{ url_for('static', filename='js/onboarding.js') }}"></script>
+    
+    <!-- Tooltips -->
+    <script src="{{ url_for('static', filename='js/tooltips.js') }}"></script>
+    
+    <!-- Tabs -->
+    <script src="{{ url_for('static', filename='js/tabs.js') }}"></script>
+    
+    <!-- Stats Counter -->
+    <script src="{{ url_for('static', filename='js/stats-counter.js') }}"></script>
+    
+    <!-- Timer -->
+    <script src="{{ url_for('static', filename='js/timer.js') }}"></script>
     
     <!-- Theme Toggle -->
     <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
