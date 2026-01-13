@@ -1,0 +1,402 @@
+/**
+ * Card Flip Animation Styles
+ * Flashcard-style flip animations for review mode
+ */
+
+/* Flip Card Container */
+.flip-card {
+    perspective: 1000px;
+    width: 100%;
+    height: 300px;
+    cursor: pointer;
+}
+
+.flip-card.small { height: 200px; }
+.flip-card.large { height: 400px; }
+.flip-card.auto { height: auto; min-height: 200px; }
+
+/* Inner Container - This rotates */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+/* Flipped State */
+.flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Vertical flip variant */
+.flip-card.vertical .flip-card-inner {
+    transform: rotateX(0deg);
+}
+
+.flip-card.vertical.flipped .flip-card-inner {
+    transform: rotateX(180deg);
+}
+
+/* Card Faces */
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+}
+
+.flip-card.vertical .flip-card-back {
+    transform: rotateX(180deg);
+}
+
+/* Card Content */
+.flip-card-content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow-y: auto;
+}
+
+/* Card Header */
+.flip-card-header {
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flip-card-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+}
+
+.flip-card-front .flip-card-label {
+    color: var(--accent-primary);
+}
+
+.flip-card-back .flip-card-label {
+    color: var(--accent-success);
+}
+
+/* Flip Indicator */
+.flip-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+}
+
+.flip-indicator i {
+    animation: flipHint 2s ease-in-out infinite;
+}
+
+@keyframes flipHint {
+    0%, 100% { transform: rotateY(0deg); }
+    50% { transform: rotateY(20deg); }
+}
+
+/* Question/Answer Styling */
+.flip-card-question {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.flip-card-answer {
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.flip-card-hint {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(var(--accent-info-rgb), 0.1);
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: var(--accent-info);
+}
+
+/* Code in Cards */
+.flip-card-code {
+    width: 100%;
+    text-align: left;
+    background: var(--code-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    overflow-x: auto;
+}
+
+/* Card Footer */
+.flip-card-footer {
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Difficulty Tags */
+.flip-card-difficulty {
+    padding: 0.25rem 0.625rem;
+    border-radius: 20px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.flip-card-difficulty.easy {
+    background: rgba(81, 207, 102, 0.15);
+    color: var(--accent-success);
+}
+
+.flip-card-difficulty.medium {
+    background: rgba(255, 193, 7, 0.15);
+    color: var(--accent-warning);
+}
+
+.flip-card-difficulty.hard {
+    background: rgba(255, 107, 107, 0.15);
+    color: var(--accent-danger);
+}
+
+/* ==================== DECK STYLES ==================== */
+
+/* Card Stack */
+.flip-card-stack {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.flip-card-stack .flip-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.flip-card-stack .flip-card:nth-child(1) { z-index: 3; }
+.flip-card-stack .flip-card:nth-child(2) { 
+    z-index: 2; 
+    transform: translateY(8px) scale(0.98);
+    opacity: 0.7;
+}
+.flip-card-stack .flip-card:nth-child(3) { 
+    z-index: 1; 
+    transform: translateY(16px) scale(0.96);
+    opacity: 0.4;
+}
+
+/* Swipe Actions */
+.flip-card.swiping {
+    transition: transform 0.3s ease;
+}
+
+.flip-card.swipe-left {
+    transform: translateX(-150%) rotate(-15deg);
+    opacity: 0;
+}
+
+.flip-card.swipe-right {
+    transform: translateX(150%) rotate(15deg);
+    opacity: 0;
+}
+
+/* Swipe Indicators */
+.swipe-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.swipe-indicator.left {
+    left: 1rem;
+    background: var(--accent-danger);
+    color: white;
+}
+
+.swipe-indicator.right {
+    right: 1rem;
+    background: var(--accent-success);
+    color: white;
+}
+
+.flip-card.swiping-left .swipe-indicator.left,
+.flip-card.swiping-right .swipe-indicator.right {
+    opacity: 1;
+}
+
+/* ==================== REVIEW CONTROLS ==================== */
+
+.flip-card-controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.flip-control-btn {
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.flip-control-btn.again {
+    background: rgba(255, 107, 107, 0.15);
+    color: var(--accent-danger);
+}
+
+.flip-control-btn.hard {
+    background: rgba(255, 193, 7, 0.15);
+    color: var(--accent-warning);
+}
+
+.flip-control-btn.good {
+    background: rgba(0, 207, 240, 0.15);
+    color: var(--accent-info);
+}
+
+.flip-control-btn.easy {
+    background: rgba(81, 207, 102, 0.15);
+    color: var(--accent-success);
+}
+
+.flip-control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Keyboard Hints */
+.flip-control-btn .key-hint {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.375rem;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-left: 0.25rem;
+}
+
+/* ==================== PROGRESS BAR ==================== */
+
+.flip-card-progress {
+    margin-bottom: 1rem;
+}
+
+.flip-card-progress-bar {
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.flip-card-progress-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    transition: width 0.3s ease;
+}
+
+.flip-card-progress-text {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ==================== THEMES ==================== */
+
+/* Gradient Border */
+.flip-card.gradient-border .flip-card-front,
+.flip-card.gradient-border .flip-card-back {
+    border: 2px solid transparent;
+    background: 
+        linear-gradient(var(--bg-card), var(--bg-card)) padding-box,
+        var(--gradient-primary) border-box;
+}
+
+/* Dark Card */
+.flip-card.dark .flip-card-front,
+.flip-card.dark .flip-card-back {
+    background: #1a1d21;
+    color: #f8f9fa;
+}
+
+/* Success Card (Mastered) */
+.flip-card.mastered .flip-card-front,
+.flip-card.mastered .flip-card-back {
+    border-color: var(--accent-success);
+    background: linear-gradient(135deg, var(--bg-card), rgba(81, 207, 102, 0.05));
+}
+
+/* Mobile Optimizations */
+@media (max-width: 576px) {
+    .flip-card {
+        height: 250px;
+    }
+
+    .flip-card-content {
+        padding: 1rem;
+    }
+
+    .flip-card-question {
+        font-size: 1.125rem;
+    }
+
+    .flip-card-answer {
+        font-size: 1rem;
+    }
+
+    .flip-card-controls {
+        flex-wrap: wrap;
+    }
+
+    .flip-control-btn {
+        flex: 1;
+        min-width: calc(50% - 0.5rem);
+        justify-content: center;
+    }
+}
+
