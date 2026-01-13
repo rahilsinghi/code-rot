@@ -1,0 +1,447 @@
+/**
+ * Multi-Step Progress Tracker Styles
+ * Visual progress indicators for multi-step processes
+ */
+
+/* Base Progress Tracker */
+.progress-tracker {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 2rem 0;
+}
+
+/* Connecting Line */
+.progress-tracker::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--border-color);
+    z-index: 0;
+}
+
+/* Progress Line (filled portion) */
+.progress-tracker-line {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    z-index: 1;
+    transition: width 0.5s ease;
+}
+
+/* Individual Step */
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+/* Step Circle */
+.progress-step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 3px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+}
+
+.progress-step-circle i {
+    font-size: 1rem;
+}
+
+/* Step States */
+.progress-step.completed .progress-step-circle {
+    background: var(--accent-success);
+    border-color: var(--accent-success);
+    color: white;
+}
+
+.progress-step.active .progress-step-circle {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.progress-step.error .progress-step-circle {
+    background: var(--accent-danger);
+    border-color: var(--accent-danger);
+    color: white;
+}
+
+/* Step Label */
+.progress-step-label {
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+    max-width: 100px;
+    transition: color 0.3s ease;
+}
+
+.progress-step.active .progress-step-label,
+.progress-step.completed .progress-step-label {
+    color: var(--text-primary);
+}
+
+/* Step Description */
+.progress-step-desc {
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+    text-align: center;
+}
+
+/* ==================== VARIANTS ==================== */
+
+/* Vertical Tracker */
+.progress-tracker.vertical {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+}
+
+.progress-tracker.vertical::before {
+    top: 0;
+    bottom: 0;
+    left: 18px;
+    right: auto;
+    width: 3px;
+    height: auto;
+}
+
+.progress-tracker.vertical .progress-tracker-line {
+    top: 0;
+    left: 18px;
+    right: auto;
+    width: 3px;
+    height: 0;
+}
+
+.progress-tracker.vertical .progress-step {
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    padding: 1rem 0;
+}
+
+.progress-tracker.vertical .progress-step-content {
+    margin-left: 1rem;
+    text-align: left;
+}
+
+.progress-tracker.vertical .progress-step-label {
+    margin-top: 0;
+    max-width: none;
+}
+
+/* Compact Tracker */
+.progress-tracker.compact .progress-step-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+}
+
+.progress-tracker.compact::before {
+    top: 13px;
+    height: 2px;
+}
+
+.progress-tracker.compact .progress-tracker-line {
+    top: 13px;
+    height: 2px;
+}
+
+.progress-tracker.compact .progress-step-label {
+    font-size: 0.75rem;
+}
+
+/* Large Tracker */
+.progress-tracker.large .progress-step-circle {
+    width: 56px;
+    height: 56px;
+    font-size: 1.25rem;
+}
+
+.progress-tracker.large::before {
+    top: 27px;
+    height: 4px;
+}
+
+.progress-tracker.large .progress-tracker-line {
+    top: 27px;
+    height: 4px;
+}
+
+/* Numbered Steps */
+.progress-tracker.numbered .progress-step-circle::before {
+    content: attr(data-step);
+}
+
+/* Icon Steps */
+.progress-step.completed .progress-step-circle::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+.progress-step.error .progress-step-circle::after {
+    content: '\f00d';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Clickable Steps */
+.progress-tracker.clickable .progress-step {
+    cursor: pointer;
+}
+
+.progress-tracker.clickable .progress-step:hover .progress-step-circle {
+    border-color: var(--accent-primary);
+    transform: scale(1.05);
+}
+
+/* ==================== SPECIAL STYLES ==================== */
+
+/* Timeline Variant */
+.progress-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.progress-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-color);
+}
+
+.progress-timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.progress-timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.progress-timeline-dot {
+    position: absolute;
+    left: -26px;
+    top: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 3px solid var(--border-color);
+}
+
+.progress-timeline-item.completed .progress-timeline-dot {
+    background: var(--accent-success);
+    border-color: var(--accent-success);
+}
+
+.progress-timeline-item.active .progress-timeline-dot {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.progress-timeline-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.progress-timeline-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.progress-timeline-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.progress-timeline-time {
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+}
+
+/* Percentage Progress */
+.progress-percentage {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.progress-percentage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.progress-percentage-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.progress-percentage-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+.progress-percentage-bar {
+    height: 8px;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-percentage-fill {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-percentage-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Milestone Progress */
+.progress-milestones {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.progress-milestone {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.progress-milestone.achieved {
+    border-color: var(--accent-success);
+    background: rgba(81, 207, 102, 0.05);
+}
+
+.progress-milestone-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: var(--text-muted);
+}
+
+.progress-milestone.achieved .progress-milestone-icon {
+    background: rgba(81, 207, 102, 0.15);
+    color: var(--accent-success);
+}
+
+.progress-milestone-content {
+    flex: 1;
+}
+
+.progress-milestone-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.progress-milestone-desc {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.progress-milestone-progress {
+    width: 60px;
+    text-align: right;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.progress-milestone.achieved .progress-milestone-progress {
+    color: var(--accent-success);
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+    .progress-tracker:not(.vertical) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+    }
+
+    .progress-tracker:not(.vertical)::before {
+        left: 18px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        height: auto;
+        right: auto;
+    }
+
+    .progress-tracker:not(.vertical) .progress-tracker-line {
+        left: 18px;
+        top: 0;
+        width: 3px;
+    }
+
+    .progress-tracker:not(.vertical) .progress-step {
+        flex-direction: row;
+        width: 100%;
+        padding: 1rem 0;
+    }
+
+    .progress-tracker:not(.vertical) .progress-step-label {
+        margin-top: 0;
+        margin-left: 1rem;
+        max-width: none;
+        text-align: left;
+    }
+}
+
