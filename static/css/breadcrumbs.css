@@ -1,0 +1,295 @@
+/**
+ * Breadcrumb Navigation Styles
+ * Accessible navigation breadcrumbs
+ */
+
+/* Base Breadcrumb */
+.breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    list-style: none;
+    font-size: 0.875rem;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: '/';
+    padding: 0 0.75rem;
+    color: var(--text-muted);
+}
+
+.breadcrumb-item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--accent-primary);
+}
+
+.breadcrumb-item.active {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* With Icons */
+.breadcrumb-item i {
+    margin-right: 0.375rem;
+    font-size: 0.8125rem;
+}
+
+.breadcrumb-item a i {
+    opacity: 0.7;
+}
+
+.breadcrumb-item a:hover i {
+    opacity: 1;
+}
+
+/* ==================== VARIANTS ==================== */
+
+/* Arrow Separator */
+.breadcrumb.arrows .breadcrumb-item + .breadcrumb-item::before {
+    content: '\f054';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.625rem;
+}
+
+/* Chevron Separator */
+.breadcrumb.chevrons .breadcrumb-item + .breadcrumb-item::before {
+    content: '\f105';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.75rem;
+}
+
+/* Dot Separator */
+.breadcrumb.dots .breadcrumb-item + .breadcrumb-item::before {
+    content: '•';
+    font-size: 1rem;
+}
+
+/* Pipe Separator */
+.breadcrumb.pipes .breadcrumb-item + .breadcrumb-item::before {
+    content: '|';
+}
+
+/* Background Style */
+.breadcrumb.bg {
+    background: var(--bg-tertiary);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
+
+/* Card Style */
+.breadcrumb.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 0.875rem 1.25rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Pill Style */
+.breadcrumb.pills .breadcrumb-item {
+    background: var(--bg-tertiary);
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    margin-right: 0.5rem;
+}
+
+.breadcrumb.pills .breadcrumb-item + .breadcrumb-item::before {
+    display: none;
+}
+
+.breadcrumb.pills .breadcrumb-item.active {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.breadcrumb.pills .breadcrumb-item a {
+    color: var(--text-primary);
+}
+
+/* Large */
+.breadcrumb.lg {
+    font-size: 1rem;
+}
+
+.breadcrumb.lg .breadcrumb-item + .breadcrumb-item::before {
+    padding: 0 1rem;
+}
+
+/* Small */
+.breadcrumb.sm {
+    font-size: 0.75rem;
+}
+
+.breadcrumb.sm .breadcrumb-item + .breadcrumb-item::before {
+    padding: 0 0.5rem;
+}
+
+/* ==================== SPECIAL STYLES ==================== */
+
+/* With Dropdown */
+.breadcrumb-dropdown {
+    position: relative;
+}
+
+.breadcrumb-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    cursor: pointer;
+}
+
+.breadcrumb-dropdown-toggle::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.625rem;
+    transition: transform 0.2s ease;
+}
+
+.breadcrumb-dropdown.open .breadcrumb-dropdown-toggle::after {
+    transform: rotate(180deg);
+}
+
+.breadcrumb-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 180px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+}
+
+.breadcrumb-dropdown.open .breadcrumb-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.breadcrumb-dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.breadcrumb-dropdown-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* Collapsible Breadcrumb */
+.breadcrumb.collapsible .breadcrumb-collapsed {
+    display: none;
+}
+
+.breadcrumb.collapsible .breadcrumb-ellipsis {
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 0.25rem;
+}
+
+.breadcrumb.collapsible .breadcrumb-ellipsis:hover {
+    background: var(--border-color);
+}
+
+.breadcrumb.collapsible.expanded .breadcrumb-collapsed {
+    display: flex;
+}
+
+.breadcrumb.collapsible.expanded .breadcrumb-ellipsis {
+    display: none;
+}
+
+/* Progress Breadcrumb */
+.breadcrumb.progress .breadcrumb-item {
+    flex: 1;
+    position: relative;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-tertiary);
+    clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%, 15px 50%);
+    margin-left: -5px;
+}
+
+.breadcrumb.progress .breadcrumb-item:first-child {
+    clip-path: polygon(0 0, calc(100% - 15px) 0, 100% 50%, calc(100% - 15px) 100%, 0 100%);
+    margin-left: 0;
+    border-radius: 6px 0 0 6px;
+}
+
+.breadcrumb.progress .breadcrumb-item:last-child {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 15px 50%);
+    border-radius: 0 6px 6px 0;
+}
+
+.breadcrumb.progress .breadcrumb-item + .breadcrumb-item::before {
+    display: none;
+}
+
+.breadcrumb.progress .breadcrumb-item.completed {
+    background: var(--accent-success);
+    color: white;
+}
+
+.breadcrumb.progress .breadcrumb-item.active {
+    background: var(--accent-primary);
+    color: white;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .breadcrumb {
+        font-size: 0.8125rem;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        padding: 0 0.5rem;
+    }
+
+    .breadcrumb.progress {
+        flex-direction: column;
+    }
+
+    .breadcrumb.progress .breadcrumb-item {
+        clip-path: none;
+        margin-left: 0;
+        border-radius: 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .breadcrumb.progress .breadcrumb-item:first-child {
+        border-radius: 6px 6px 0 0;
+    }
+
+    .breadcrumb.progress .breadcrumb-item:last-child {
+        border-radius: 0 0 6px 6px;
+        border-bottom: none;
+    }
+}
+
