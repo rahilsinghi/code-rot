@@ -1,0 +1,438 @@
+/**
+ * Alert & Banner Component Styles
+ * Notifications, warnings, and announcements
+ */
+
+/* Base Alert */
+.custom-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1rem 1.25rem;
+    border-radius: 10px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+/* Alert Icon */
+.alert-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+/* Alert Content */
+.alert-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.alert-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+}
+
+.alert-message {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.alert-message a {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+/* Alert Close Button */
+.alert-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.alert-close:hover {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+/* Alert Actions */
+.alert-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.alert-action {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.alert-action.primary {
+    background: currentColor;
+    color: white;
+}
+
+.alert-action.secondary {
+    background: transparent;
+    border: 1px solid currentColor;
+}
+
+/* ==================== ALERT TYPES ==================== */
+
+/* Info Alert */
+.custom-alert.info {
+    background: rgba(0, 207, 240, 0.08);
+    border-color: rgba(0, 207, 240, 0.2);
+}
+
+.custom-alert.info .alert-icon {
+    color: var(--accent-info);
+}
+
+.custom-alert.info .alert-title {
+    color: var(--accent-info);
+}
+
+/* Success Alert */
+.custom-alert.success {
+    background: rgba(81, 207, 102, 0.08);
+    border-color: rgba(81, 207, 102, 0.2);
+}
+
+.custom-alert.success .alert-icon {
+    color: var(--accent-success);
+}
+
+.custom-alert.success .alert-title {
+    color: var(--accent-success);
+}
+
+/* Warning Alert */
+.custom-alert.warning {
+    background: rgba(255, 193, 7, 0.08);
+    border-color: rgba(255, 193, 7, 0.2);
+}
+
+.custom-alert.warning .alert-icon {
+    color: var(--accent-warning);
+}
+
+.custom-alert.warning .alert-title {
+    color: #b38600;
+}
+
+[data-theme="dark"] .custom-alert.warning .alert-title,
+[data-theme="ocean"] .custom-alert.warning .alert-title,
+[data-theme="midnight"] .custom-alert.warning .alert-title {
+    color: var(--accent-warning);
+}
+
+/* Error/Danger Alert */
+.custom-alert.error,
+.custom-alert.danger {
+    background: rgba(255, 107, 107, 0.08);
+    border-color: rgba(255, 107, 107, 0.2);
+}
+
+.custom-alert.error .alert-icon,
+.custom-alert.danger .alert-icon {
+    color: var(--accent-danger);
+}
+
+.custom-alert.error .alert-title,
+.custom-alert.danger .alert-title {
+    color: var(--accent-danger);
+}
+
+/* ==================== VARIANTS ==================== */
+
+/* Solid Alerts */
+.custom-alert.solid.info {
+    background: var(--accent-info);
+    border-color: var(--accent-info);
+    color: white;
+}
+
+.custom-alert.solid.success {
+    background: var(--accent-success);
+    border-color: var(--accent-success);
+    color: white;
+}
+
+.custom-alert.solid.warning {
+    background: var(--accent-warning);
+    border-color: var(--accent-warning);
+    color: #212529;
+}
+
+.custom-alert.solid.error,
+.custom-alert.solid.danger {
+    background: var(--accent-danger);
+    border-color: var(--accent-danger);
+    color: white;
+}
+
+.custom-alert.solid .alert-icon,
+.custom-alert.solid .alert-title,
+.custom-alert.solid .alert-message {
+    color: inherit;
+}
+
+.custom-alert.solid .alert-close {
+    color: inherit;
+    opacity: 0.7;
+}
+
+.custom-alert.solid .alert-close:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Bordered Alerts */
+.custom-alert.bordered {
+    background: var(--bg-card);
+    border-left-width: 4px;
+}
+
+/* Minimal Alerts */
+.custom-alert.minimal {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0;
+}
+
+/* ==================== BANNER ==================== */
+
+.banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--gradient-primary);
+    color: white;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+.banner a {
+    color: white;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.banner-close {
+    background: none;
+    border: none;
+    color: white;
+    opacity: 0.7;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.banner-close:hover {
+    opacity: 1;
+}
+
+/* Banner Types */
+.banner.info {
+    background: var(--accent-info);
+}
+
+.banner.success {
+    background: var(--accent-success);
+}
+
+.banner.warning {
+    background: var(--accent-warning);
+    color: #212529;
+}
+
+.banner.warning a {
+    color: #212529;
+}
+
+.banner.error {
+    background: var(--accent-danger);
+}
+
+/* Fixed Banner */
+.banner.fixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+}
+
+.banner.fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+}
+
+/* ==================== CALLOUT ==================== */
+
+.callout {
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--accent-primary);
+    margin: 1rem 0;
+}
+
+.callout-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.callout-content {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.callout.info { border-left-color: var(--accent-info); }
+.callout.success { border-left-color: var(--accent-success); }
+.callout.warning { border-left-color: var(--accent-warning); }
+.callout.error { border-left-color: var(--accent-danger); }
+
+.callout.info .callout-title { color: var(--accent-info); }
+.callout.success .callout-title { color: var(--accent-success); }
+.callout.warning .callout-title { color: var(--accent-warning); }
+.callout.error .callout-title { color: var(--accent-danger); }
+
+/* ==================== INLINE ALERT ==================== */
+
+.inline-alert {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.inline-alert.info {
+    background: rgba(0, 207, 240, 0.15);
+    color: var(--accent-info);
+}
+
+.inline-alert.success {
+    background: rgba(81, 207, 102, 0.15);
+    color: var(--accent-success);
+}
+
+.inline-alert.warning {
+    background: rgba(255, 193, 7, 0.15);
+    color: var(--accent-warning);
+}
+
+.inline-alert.error {
+    background: rgba(255, 107, 107, 0.15);
+    color: var(--accent-danger);
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+.custom-alert.animate-in {
+    animation: alertSlideIn 0.3s ease;
+}
+
+.custom-alert.animate-out {
+    animation: alertSlideOut 0.3s ease forwards;
+}
+
+@keyframes alertSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes alertSlideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.banner.animate-in {
+    animation: bannerSlideDown 0.3s ease;
+}
+
+@keyframes bannerSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .custom-alert {
+        padding: 0.875rem 1rem;
+    }
+
+    .alert-actions {
+        flex-direction: column;
+    }
+
+    .alert-action {
+        text-align: center;
+    }
+
+    .banner {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.625rem 1rem;
+    }
+}
+
