@@ -271,3 +271,5 @@ document.addEventListener('achievement-unlocked', (e) => {
 // confetti.firework()        - Single firework
 // confetti.celebration()     - Full celebration sequence
 
+
+
