@@ -417,3 +417,5 @@ document.head.appendChild(tabStyles);
 window.TabPanel = TabPanel;
 window.createTabs = (container, options) => new TabPanel(container, options);
 
+
+
