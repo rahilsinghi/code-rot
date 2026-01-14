@@ -423,3 +423,4 @@ window.Rating = Rating;
 window.createRating = (el, options) => new Rating(el, options);
 window.createStaticRating = createStaticRating;
 
+
