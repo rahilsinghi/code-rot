@@ -452,3 +452,4 @@ window.ScrollProgress = ScrollProgress;
 window.ParallaxScroll = ParallaxScroll;
 window.scrollAnimations = scrollAnimations;
 
+
