@@ -453,3 +453,4 @@ document.head.appendChild(paginationStyles);
 window.Pagination = Pagination;
 window.createPagination = (options) => new Pagination(options);
 
+
