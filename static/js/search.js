@@ -419,3 +419,6 @@ window.globalSearch = globalSearch;
 // Open search function for buttons/links
 window.openSearch = () => globalSearch.open();
 
+
+
+
