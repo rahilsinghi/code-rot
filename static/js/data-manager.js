@@ -430,3 +430,6 @@ window.importData = () => dataManager.showImportDialog();
 window.createBackup = () => dataManager.createBackup();
 window.clearAllData = () => dataManager.clearAllData();
 
+
+
+
