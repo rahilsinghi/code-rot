@@ -295,3 +295,6 @@ class ChartManager {
 // Initialize chart manager
 window.chartManager = new ChartManager();
 
+
+
+
