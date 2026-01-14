@@ -362,3 +362,4 @@ document.head.appendChild(maskStyles);
 window.InputMask = InputMask;
 window.createMaskedInput = (el, options) => new InputMask(el, options);
 
+
