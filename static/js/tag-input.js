@@ -531,3 +531,4 @@ document.head.appendChild(tagInputStyles);
 window.TagInput = TagInput;
 window.createTagInput = (el, options) => new TagInput(el, options);
 
+
