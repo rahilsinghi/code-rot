@@ -459,3 +459,5 @@ window.createStopwatch = (options) => new Timer({ type: 'stopwatch', ...options 
 window.createCountdown = (duration, options) => new Timer({ type: 'countdown', duration, ...options });
 window.createPomodoro = (options) => new Timer({ type: 'pomodoro', ...options });
 
+
+
