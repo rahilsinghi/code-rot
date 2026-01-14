@@ -371,3 +371,5 @@ document.head.appendChild(counterStyles);
 window.StatsCounter = StatsCounter;
 window.createCounter = (el, options) => new StatsCounter(el, options);
 
+
+
