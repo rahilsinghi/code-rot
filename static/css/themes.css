@@ -52,11 +52,11 @@
 
 /* Dark Theme */
 [data-theme="dark"] {
-    --bg-primary: #1a1d21;
-    --bg-secondary: #212529;
-    --bg-tertiary: #2d3238;
-    --bg-card: #2d3238;
-    --bg-card-hover: #343a40;
+    --bg-primary: #0f1419;
+    --bg-secondary: #1a1f26;
+    --bg-tertiary: #242b33;
+    --bg-card: #1e2329;
+    --bg-card-hover: #2a3038;
     
     --text-primary: #f8f9fa;
     --text-secondary: #adb5bd;
