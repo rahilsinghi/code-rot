@@ -17,6 +17,8 @@ class TabPanel {
             onChange: null,
             keyboard: true,
             autoActivate: false, // Auto-activate on arrow key
+            fade: true,
+            swipeable: false,
             ...options
         };
 
