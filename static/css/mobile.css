@@ -9,6 +9,10 @@
     --safe-area-bottom: env(safe-area-inset-bottom, 0px);
     --safe-area-top: env(safe-area-inset-top, 0px);
     --touch-target: 44px;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
 }
 
 * {
