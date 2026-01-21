@@ -12,6 +12,8 @@ class ConfettiCelebration {
             decay: 0.9,
             gravity: 1,
             ticks: 200,
+            scalar: 1.2,
+            shapes: ['circle', 'square'],
             colors: ['#ff6b6b', '#4dabf7', '#51cf66', '#ffd43b', '#b197fc', '#ff922b'],
             ...options
         };
