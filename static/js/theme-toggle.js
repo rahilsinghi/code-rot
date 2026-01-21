@@ -6,11 +6,12 @@
 class ThemeManager {
     constructor() {
         this.theme = this.getSavedTheme() || this.getSystemPreference();
+        this.transitionDuration = 300;
         this.init();
     }
 
     getSavedTheme() {
-        return localStorage.getItem('theme');
+        return localStorage.getItem('theme') || localStorage.getItem('preferred-theme');
     }
 
     getSystemPreference() {
