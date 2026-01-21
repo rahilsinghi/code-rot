@@ -7,6 +7,8 @@
 let socket = null;
 let currentSession = null;
 let chartUpdateInterval = null;
+const REFRESH_INTERVAL = 30000; // 30 seconds
+const ANIMATION_DURATION = 300;
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
