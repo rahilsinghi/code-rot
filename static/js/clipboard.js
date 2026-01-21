@@ -7,6 +7,8 @@ class ClipboardManager {
     constructor() {
         this.copyHistory = [];
         this.maxHistory = 10;
+        this.successDuration = 2000;
+        this.animationDuration = 300;
         this.init();
     }
 
