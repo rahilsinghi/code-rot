@@ -26,12 +26,14 @@ body {
     border: none;
     border-radius: 1rem;
     box-shadow: var(--box-shadow);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+    backdrop-filter: blur(10px);
 }
 
 .card:hover {
-    box-shadow: var(--box-shadow-lg);
-    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px) scale(1.01);
 }
 
 .card-header {
