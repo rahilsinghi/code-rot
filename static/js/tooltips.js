@@ -10,6 +10,8 @@ class TooltipManager {
         this.hideTimeout = null;
         this.showDelay = 300;
         this.hideDelay = 100;
+        this.transitionDuration = 200;
+        this.offset = 10;
         
         this.init();
     }
