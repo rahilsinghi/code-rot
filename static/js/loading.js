@@ -6,6 +6,8 @@
 class LoadingManager {
     constructor() {
         this.loadingElements = new Map();
+        this.defaultDuration = 300;
+        this.minDisplayTime = 500;
     }
 
     /**
