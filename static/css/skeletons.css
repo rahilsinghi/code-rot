@@ -12,8 +12,9 @@
         var(--bg-tertiary) 75%
     );
     background-size: 200% 100%;
-    animation: skeletonShimmer 1.5s ease-in-out infinite;
-    border-radius: 4px;
+    animation: skeletonShimmer 1.8s ease-in-out infinite;
+    border-radius: 6px;
+    opacity: 0.9;
 }
 
 @keyframes skeletonShimmer {
