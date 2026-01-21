@@ -18,6 +18,8 @@ class Dropdown {
             clearable: true,
             disabled: false,
             maxHeight: 300,
+            animationDuration: 200,
+            closeOnSelect: true,
             onChange: null,
             onSearch: null,
             options: [],
