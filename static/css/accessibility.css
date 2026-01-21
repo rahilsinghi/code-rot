@@ -6,16 +6,17 @@
 /* Skip to content link */
 .skip-link {
     position: absolute;
-    top: -40px;
+    top: -50px;
     left: 0;
     background: var(--accent-primary);
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     z-index: 10003;
-    border-radius: 0 0 8px 0;
+    border-radius: 0 0 10px 0;
     text-decoration: none;
-    font-weight: 500;
-    transition: top 0.3s ease;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .skip-link:focus {
