@@ -5,10 +5,11 @@
 
 /* Flip Card Container */
 .flip-card {
-    perspective: 1000px;
+    perspective: 1500px;
     width: 100%;
     height: 300px;
     cursor: pointer;
+    transform-style: preserve-3d;
 }
 
 .flip-card.small { height: 200px; }
