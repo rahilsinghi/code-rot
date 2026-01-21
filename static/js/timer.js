@@ -14,6 +14,8 @@ class Timer {
             autoStart: false,
             tickSound: false,
             alarmSound: true,
+            visualNotifications: true,
+            persistState: true,
             onTick: null,
             onComplete: null,
             onStateChange: null,
