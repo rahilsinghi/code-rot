@@ -10,6 +10,8 @@ class GlobalSearch {
             maxResults: 10,
             maxRecentSearches: 5,
             debounceMs: 200,
+            animationDuration: 300,
+            fuzzyThreshold: 0.6,
             ...options
         };
 
