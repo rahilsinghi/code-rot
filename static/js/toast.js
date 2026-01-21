@@ -9,6 +9,7 @@ class ToastManager {
         this.toasts = [];
         this.maxToasts = 5;
         this.defaultDuration = 4000;
+        this.animationDuration = 300;
         this.init();
     }
 
