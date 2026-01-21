@@ -18,9 +18,10 @@
     top: 20px;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 4px;
     background: var(--border-color);
     z-index: 0;
+    border-radius: 2px;
 }
 
 /* Progress Line (filled portion) */
