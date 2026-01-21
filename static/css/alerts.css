@@ -7,13 +7,15 @@
 .custom-alert {
     display: flex;
     align-items: flex-start;
-    gap: 0.875rem;
-    padding: 1rem 1.25rem;
-    border-radius: 10px;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 12px;
     background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
     margin-bottom: 1rem;
     position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Alert Icon */
