@@ -17,6 +17,8 @@ class Modal {
             showFooter: true,
             footerButtons: [],
             animation: 'fade', // fade, slide, scale, none
+            animationDuration: 300,
+            backdrop: true,
             onOpen: null,
             onClose: null,
             onConfirm: null,
